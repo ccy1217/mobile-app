@@ -13,14 +13,15 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_sign_up)
 
-        //var txtSignIn = findViewById<TextView>(R.id.txtSignIn)
+        val signInText = findViewById<TextView>(R.id.txtSignIn)
+        signInText.setOnClickListener {
 
-        //txtSignIn.setOnClickListener {
-           // startActivity(Intent(this, LoginActivity::class.java))
-          //  finish()
-        //}
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
     }
 }

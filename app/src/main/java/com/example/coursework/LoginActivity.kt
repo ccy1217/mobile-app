@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -21,18 +22,27 @@ import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
 
-        val loginIcon = findViewById<TextView>(R.id.txtSignUp)
-
-        // Navigate to HomePage1Activity when homeIcon is clicked
-        loginIcon.setOnClickListener {
+        // Find the "Sign Up" text and set an OnClickListener
+        val signUpText = findViewById<TextView>(R.id.txtSignUp)
+        signUpText.setOnClickListener {
+            // Start the SignUpActivity when "Sign Up" text is clicked
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
+        // Find the "Login" button and set an OnClickListener
+        val loginButton = findViewById<Button>(R.id.login_button)
+        loginButton.setOnClickListener {
+            // Start the MainHomePageActivity when "Login" button is clicked
+            val intent = Intent(this, MainHomePageActivity::class.java)
+            startActivity(intent)
+            finish()
 
     }
 
-}
+}}

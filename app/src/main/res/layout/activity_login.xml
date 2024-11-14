@@ -1,110 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/signup_background"
     android:gravity="center"
     android:padding="50dp"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="@string/daily_quiz"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:paddingTop="10dp"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/create_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="53dp"
+        android:background="@drawable/search_bkg"
+        android:hint="@string/Email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:textColor="@color/navy2"
+        android:textColorHint="@color/grey2"
+        android:textSize="18sp"
+        tools:ignore="Autofill" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/Password"
+        android:textColorHint="@color/grey2"
+        app:boxBackgroundMode="none"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/LoginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bkg"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:singleLine="true"
+            android:textColor="@color/navy2"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/login_button"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:backgroundTint="@color/grey"
+        android:text="@string/LOGIN"
+        android:textColor="@color/white" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:layout_marginBottom="364dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="cursive"
-            android:text="@string/daily_quiz"
-            android:textAlignment="center"
+            android:text="@string/Do_not_have"
             android:textColor="@color/white"
-            android:paddingTop="10dp"
-            android:textSize="40sp" />
+            android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/create_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="53dp"
-            android:background="@drawable/search_bkg"
-            android:hint="@string/Email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textColor="@color/navy2"
-            android:textColorHint="@color/grey2"
-            android:textSize="18sp"
-            tools:ignore="Autofill" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="@string/Password"
-            android:textColorHint="@color/grey2"
-            app:boxBackgroundMode="none"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/LoginPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_bkg"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:singleLine="true"
-                android:textColor="@color/navy2"
-                android:textSize="18sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/signup_button"
-            style="@style/Widget.MaterialComponents.Button.Icon"
+        <TextView
+            android:id="@+id/txtSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:backgroundTint="@color/grey"
-            android:text="@string/LOGIN"
-            android:textColor="@color/white"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Do_not_have"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/txtSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signup"
-                android:textColor="@color/yellow"
-                android:textSize="16sp" />
-        </LinearLayout>
+            android:text="@string/signup"
+            android:textColor="@color/yellow"
+            android:textSize="16sp" />
     </LinearLayout>
 
-</ScrollView>
-
-
+</LinearLayout>
