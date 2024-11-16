@@ -55,11 +55,11 @@ class HomePageActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchList.clear()
-                val searchText = newText?.toLowerCase(Locale.getDefault()).orEmpty()
+                val searchText = newText?.lowercase(Locale.getDefault()).orEmpty()
 
                 if (searchText.isNotEmpty()) {
                     dataList.forEach {
-                        if (it.dataTitle.toLowerCase(Locale.getDefault()).contains(searchText)) {
+                        if (it.dataTitle.lowercase(Locale.getDefault()).contains(searchText)) {
                             searchList.add(it)
                         }
                     }

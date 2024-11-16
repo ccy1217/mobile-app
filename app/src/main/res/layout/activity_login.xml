@@ -22,7 +22,7 @@
         android:textSize="40sp" />
 
     <EditText
-        android:id="@+id/create_email"
+        android:id="@+id/type_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="53dp"
@@ -45,7 +45,7 @@
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/LoginPassword"
+            android:id="@+id/type_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/search_bkg"

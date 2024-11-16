@@ -13,6 +13,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -23,9 +24,16 @@ import androidx.appcompat.app.AppCompatActivity
 class LoginActivity : AppCompatActivity() {
 
 
+    private lateinit var email: EditText
+    private lateinit var password: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
+        email= findViewById(R.id.type_email)
+        password= findViewById(R.id.type_password)
 
         // Find the "Sign Up" text and set an OnClickListener
         val signUpText = findViewById<TextView>(R.id.txtSignUp)
@@ -44,5 +52,6 @@ class LoginActivity : AppCompatActivity() {
             finish()
 
     }
+
 
 }}
