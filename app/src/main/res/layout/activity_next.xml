@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePageActivity"
+    tools:context=".HistoryActivity"
     android:background="@drawable/signup_background">
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar1"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/questionsRecyclerView"

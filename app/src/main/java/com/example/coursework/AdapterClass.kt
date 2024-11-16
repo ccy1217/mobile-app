@@ -36,3 +36,4 @@ data class AdapterClass(private val dataList:ArrayList<DataClass>):
 
 }
 
+//hi

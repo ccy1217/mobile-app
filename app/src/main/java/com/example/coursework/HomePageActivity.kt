@@ -1,99 +1,112 @@
 package com.example.coursework
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import java.util.*
-import kotlin.collections.ArrayList
-import android.widget.ImageView
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.Window
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
-class HomePageActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var dataList: ArrayList<DataClass>
-    private lateinit var imageList: Array<Int>
-    private lateinit var titleList: Array<String>
-    private lateinit var searchView: SearchView
-    private lateinit var searchList: ArrayList<DataClass>
-    private lateinit var adapter: AdapterClass
+class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var drawerLayout: DrawerLayout
+
+    private lateinit var mAuth: FirebaseAuth
+    private val myTag = "joanne"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_homepage)
+        setContentView(R.layout.activity_nav)
 
-        // Initialize data for images and titles
-        imageList = arrayOf(R.drawable.animals, R.drawable.sports, R.drawable.geography,
-            R.drawable.politics, R.drawable.music, R.drawable.maths, R.drawable.video_game,
-            R.drawable.science_nature, R.drawable.computer, R.drawable.mythology)
-        titleList = arrayOf("animals", "sports", "geography", "politics", "music", "maths",
-            "video game", "science & nature", "computer", "mythology")
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance()
+        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()).commit()
+            navigationView.setCheckedItem(R.id.nav_home)
+        }
+        Log.i(myTag, "Main Home Page loaded")
+    }
 
-        // Set up RecyclerView and SearchView
-        recyclerView = findViewById(R.id.recyclerView)
-        searchView = findViewById(R.id.search)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_home -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()).commit()
+            R.id.nav_quiz -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, QuizFragment()).commit()
+            R.id.nav_history -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HistoryFragment()).commit()
+            R.id.nav_setting -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SettingFragment()).commit()
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
 
-        // Initialize data lists
-        dataList = arrayListOf()
-        searchList = arrayListOf()
-        getData()
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            onBackPressedDispatcher.onBackPressed()
+        }}
 
-        // Set adapter for the RecyclerView
-        adapter = AdapterClass(searchList)
-        recyclerView.adapter = adapter
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.option_menu, menu)
+            return true
+        }
 
-        // Set up SearchView listener
-        searchView.clearFocus()
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchList.clear()
-                val searchText = newText?.lowercase(Locale.getDefault()).orEmpty()
-
-                if (searchText.isNotEmpty()) {
-                    dataList.forEach {
-                        if (it.dataTitle.lowercase(Locale.getDefault()).contains(searchText)) {
-                            searchList.add(it)
-                        }
-                    }
-                } else {
-                    searchList.addAll(dataList)
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.setting -> {
+                    // Navigate to Settings
+                    val intent = Intent(this, SettingActivity::class.java)
+                    startActivity(intent)
+                    return true
                 }
-                adapter.notifyDataSetChanged()
-                return false
+                R.id.logout_click -> {
+                    // Call logout function
+                    logoutClick()
+                    return true
+                }
             }
-        })
-        // Set up buttons for Home and Logout
-        val homeIcon = findViewById<ImageView>(R.id.left_icon)
-        val logoutIcon = findViewById<ImageView>(R.id.right_icon)
+            return super.onOptionsItemSelected(item)
+        }
 
-        // Navigate to HomePage1Activity when homeIcon is clicked
-        homeIcon.setOnClickListener {
-            val intent = Intent(this, MainHomePageActivity::class.java)
+        private fun logoutClick() {
+            Log.i(myTag, "Logout Clicked")
+            mAuth.signOut() // Firebase logout
+            updateUIOnLogout()
+        }
+
+        private fun updateUIOnLogout() {
+            // Redirect to login screen and finish this activity
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
-        // Navigate to LoginPageActivity when logoutIcon is clicked
-        logoutIcon.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java) // Replace with your actual login activity class
-            startActivity(intent)
-            finish()  // Close HomePageActivity to prevent going back after logging out
+        override fun onStop() {
+            super.onStop()
+            Log.i(myTag, "in onStop")
+            // Perform any necessary cleanup here (but do NOT log out the user)
         }
-    }
 
-    private fun getData() {
-        val scores = arrayOf(10, 20, 30, 35, 25, 50, 45, 55, 40, 15) // Example scores for each item
-        for (i in imageList.indices) {
-            val dataClass = DataClass(imageList[i], titleList[i], scores[i]) // Pass the score here
-            dataList.add(dataClass)
-        }
-        searchList.addAll(dataList)
-    }
 }
+//ji

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/home"
+            />
+
+        <item
+            android:id="@+id/nav_quiz"
+            android:title="Quiz"
+            android:icon="@drawable/quiz1"
+            />
+    </group>
+
+    <item android:title="Score">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_history"
+                    android:title="Check the history"
+                    android:icon="@drawable/history" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Others">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_setting"
+                    android:title="Check the history"
+                    android:icon="@drawable/setting" />
+            </group>
+        </menu>
+    </item>
+</menu>

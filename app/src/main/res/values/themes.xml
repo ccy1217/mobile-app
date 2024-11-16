@@ -2,8 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Coursework" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="android:statusBarColor">@color/orange</item>
     </style>
-
     <style name="Theme.Coursework" parent="Base.Theme.Coursework" />
 </resources>

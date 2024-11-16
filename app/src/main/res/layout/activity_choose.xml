@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".ChooseActivity"
     android:background="@drawable/signup_background">
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar1"/>
 
 
 
