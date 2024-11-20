@@ -17,7 +17,6 @@ class SettingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
@@ -27,37 +26,32 @@ class SettingFragment : Fragment() {
         val switch = view.findViewById<Switch>(R.id.switch1)
         val seekBar = view.findViewById<SeekBar>(R.id.seekbar1)
 
-        // Set switch state based on music playing status
+        // Update switch state based on music status
         switch.isChecked = MusicPlayerManager.isPlaying()
 
-        // Initialize SeekBar progress
+        // Initialize SeekBar to reflect current volume
         seekBar.progress = (MusicPlayerManager.getVolume() * 100).toInt()
 
-        // Switch to control music playback
+        // Toggle music playback
         switch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 MusicPlayerManager.startMusic(requireContext(), R.raw.music1)
-                Toast.makeText(requireContext(), "Music is looping", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Music started", Toast.LENGTH_SHORT).show()
             } else {
                 MusicPlayerManager.stopMusic()
                 Toast.makeText(requireContext(), "Music stopped", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // SeekBar to control music volume
+        // Update volume when SeekBar changes
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val volume = progress / 100f
                 MusicPlayerManager.setVolume(volume)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Not needed
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Not needed
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
 }

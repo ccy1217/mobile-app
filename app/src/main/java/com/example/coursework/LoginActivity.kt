@@ -69,6 +69,11 @@ class LoginActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 Log.i(myTag, "Login successful!")
                 showSnackbar("Login successful.")
+
+                // Start music playback
+                MusicPlayerManager.startMusic(this, R.raw.music1)
+
+                // Navigate to HomePageActivity
                 val intent = Intent(this, HomePageActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -78,8 +83,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun showSnackbar(message: String) {
         val rootView: View = findViewById(android.R.id.content)
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }}
-//ji

@@ -126,8 +126,4 @@ class SignUpActivity : AppCompatActivity() {
         updateUI()
     }
 
-
-
-
 }
-//ji

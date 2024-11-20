@@ -20,7 +20,7 @@ class ChooseActivity : AppCompatActivity() {
 
         // Navigate to HomePage1Activity when homeIcon is clicked
         homeIcon.setOnClickListener {
-            val intent = Intent(this, MainHomePageActivity::class.java)
+            val intent = Intent(this, HomePageActivity::class.java)
             startActivity(intent)
         }
 
@@ -32,4 +32,3 @@ class ChooseActivity : AppCompatActivity() {
         }
     }
 }
-//hi

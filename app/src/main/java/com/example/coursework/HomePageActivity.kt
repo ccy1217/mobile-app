@@ -3,6 +3,8 @@ package com.example.coursework
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -15,10 +17,10 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import androidx.core.content.ContextCompat
 
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
-
     private lateinit var mAuth: FirebaseAuth
     private val myTag = "joanne"
 
@@ -26,9 +28,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
-        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawerLayout = findViewById(R.id.drawer_layout)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -36,6 +37,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
@@ -59,51 +61,58 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            onBackPressedDispatcher.onBackPressed()
-        }}
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.option_menu, menu)
-            return true
-        }
+        // Set the text color for the menu items
+        val aboutUsItem = menu?.findItem(R.id.about_us_click)
+        val logoutItem = menu?.findItem(R.id.logout_click)
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.logout_click -> {
-                    // Call logout function
-                    logoutClick()
-                    return true
-                }
+        // Create a SpannableString for About Us item
+        val aboutUsTitle = SpannableString(aboutUsItem?.title)
+        val navyColor = ContextCompat.getColor(this, R.color.navy2) // Navy color
+        aboutUsTitle.setSpan(ForegroundColorSpan(navyColor), 0, aboutUsTitle.length, 0)
+        aboutUsItem?.title = aboutUsTitle
+
+        // Create a SpannableString for Logout item
+        val logoutTitle = SpannableString(logoutItem?.title)
+        logoutTitle.setSpan(ForegroundColorSpan(navyColor), 0, logoutTitle.length, 0)
+        logoutItem?.title = logoutTitle
+
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout_click -> {
+                logoutClick()
+                return true
             }
-            return super.onOptionsItemSelected(item)
+            R.id.about_us_click -> {
+                AboutUsDialogFragment().show(supportFragmentManager, "AboutUsDialog")
+                return true
+            }
         }
+        return super.onOptionsItemSelected(item)
+    }
 
-        private fun logoutClick() {
-            Log.i(myTag, "Logout Clicked")
-            mAuth.signOut() // Firebase logout
-            updateUIOnLogout()
-        }
+    private fun logoutClick() {
+        Log.i(myTag, "Logout Clicked")
+        mAuth.signOut()
+        MusicPlayerManager.stopMusic() // Stop music on logout
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
-        private fun updateUIOnLogout() {
-            // Redirect to login screen and finish this activity
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        override fun onStop() {
-            super.onStop()
-            Log.i(myTag, "in onStop")
-            // Perform any necessary cleanup here (but do NOT log out the user)
-        }
+    override fun onStop() {
+        super.onStop()
+        Log.i(myTag, "in onStop")
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        MusicPlayerManager.releaseMusic() // Release resources when activity is destroyed
+        MusicPlayerManager.releaseMusic()
     }
 }
