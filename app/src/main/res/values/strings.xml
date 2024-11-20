@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">coursework</string>
+    <string name="app_name">The Daily Quiz</string>
     <string name="daily_quiz">Daily Quiz</string>
     <string name="Email">Email</string>
     <string name="Password">Password</string>
@@ -34,9 +34,9 @@
         <item>True/False</item>
     </array>
     <array name="questions_category_array">
-        <item>Animals Questions</item>
-        <item>Art Questions</item>
-        <item>Geography Questions</item>
+        <item>Animals</item>
+        <item>Art</item>
+        <item>Geography</item>
     </array>
     <string-array name="questions_number_array">
         <item>1</item>
@@ -50,11 +50,10 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-    <array name="questions_true_false_array">
-        <item>True</item>
-        <item>False</item>
+    <array name="questions_difficulties_array">
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
     </array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

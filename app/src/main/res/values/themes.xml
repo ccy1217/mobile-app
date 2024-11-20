@@ -5,7 +5,9 @@
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/orange</item>
         <item name="android:statusBarColor">@color/orange</item>
-        <item name="colorOnPrimary">@color/white</item>
+    </style>
+    <style name="MenuItemTextStyle">
+        <item name="android:textColor">@color/navy2</item>
     </style>
     <style name="Theme.Coursework" parent="Base.Theme.Coursework" />
 </resources>

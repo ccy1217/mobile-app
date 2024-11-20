@@ -46,12 +46,6 @@
         android:layout_height="wrap_content"
         android:src="@drawable/logout" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/black"
-        android:text="@string/Log_out"/>
 </LinearLayout>
 
     </LinearLayout>

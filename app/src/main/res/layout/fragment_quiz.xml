@@ -106,6 +106,32 @@
                 android:backgroundTint="@color/orange"
                 />
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="5dp"
+            android:text="Choose the difficulty:"
+            android:textColor="@color/navy2"
+            tools:layout_editor_absoluteX="10dp"
+            tools:layout_editor_absoluteY="233dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/search_bkg"
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="7dp"
+            >
+            <Spinner
+                android:id="@+id/spinner4"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:entries="@array/questions_difficulties_array"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/orange"
+                />
+        </LinearLayout>
 
         <Button
             android:id="@+id/next_button"

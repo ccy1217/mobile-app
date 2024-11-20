@@ -1,116 +1,122 @@
 package com.example.coursework
 
 import android.content.Context
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
-
-    //play the music , need to use raw file, but where to put is a problem,
-    //may be i need to create setting
-    //do the notification when user create an account
-
 
     private lateinit var name: EditText
     private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var password2: EditText
     private lateinit var createAccount: Button
+    private lateinit var db: FirebaseFirestore
 
     private val myTag = "joanne"
     private var mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(myTag, "in onCreate")
         setContentView(R.layout.activity_sign_up)
 
-        // Initialize UI elements
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance()
+
+        // UI elements
         name = findViewById(R.id.create_name)
         email = findViewById(R.id.create_email)
         password = findViewById(R.id.SignUpTypePassword)
         password2 = findViewById(R.id.SignUpConfirmPassword)
         createAccount = findViewById(R.id.signup_button)
 
+        // Check if the user is already logged in
+        if (mAuth.currentUser != null) {
+            navigateToHomePage()
+            return
+        }
+
         // Create account button click
         createAccount.setOnClickListener { v -> registerClick(v) }
 
-        // Go to login page on "Sign In" text click
+        // Redirect to login page on "Sign In" text click
         val signInText = findViewById<TextView>(R.id.txtSignIn)
         signInText.setOnClickListener {
-            Log.i(myTag, "Button click and go to login page")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
 
     private fun registerClick(view: View) {
-        Log.i(myTag, "register Click")
+        Log.i(myTag, "Register button clicked")
 
-        if (mAuth.currentUser != null) {
-            displayMessage(view, getString(R.string.register_while_logged_in))
-        } else {
-            // Ensure passwords match
-            if (password.text.toString() != password2.text.toString()) {
-                displayMessage(view, "Passwords do not match")
-                return
-            }
+        // Check if passwords match
+        if (password.text.toString() != password2.text.toString()) {
+            displayMessage(view, "Passwords do not match")
+            return
+        }
 
-            // Firebase create user with email and password
-            mAuth.createUserWithEmailAndPassword(email.text.toString(), password2.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        closeKeyBoard()
+        // Create a user in Firebase Authentication
+        mAuth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Hide keyboard
+                    closeKeyBoard()
 
-                        // Display a congratulatory message
-                        displayMessage(view, "Congratulations! You have successfully created an account. Now you can login.")
+                    // Store user data in Firestore
+                    storeUserData(view)
 
-                        // Delay for a moment before navigating to Login Activity
-                        view.postDelayed({
-                            // Redirect to login page after success
-                            val intent = Intent(this, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish() // Finish SignUpActivity
-                        }, 2000) // 2-second delay
-                    } else {
-                        displayMessage(view, task.exception?.message.toString())
-                    }
+                    // Display a success message
+                    displayMessage(
+                        view,
+                        "Account created successfully! Redirecting to login page..."
+                    )
+
+                    // Redirect to Login Page after 2 seconds
+                    view.postDelayed({
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }, 2000)
+                } else {
+                    // Handle failure
+                    displayMessage(view, "Sign Up failed: ${task.exception?.message}")
                 }
-        }
+            }
     }
 
-
-    // Update the UI based on login status
-    private fun updateUI() {
-        Log.i(myTag, "in updateUI")
+    private fun storeUserData(view: View) {
         val currentUser = mAuth.currentUser
-        val greetingSpace = findViewById<TextView>(R.id.create_email)
-        greetingSpace.text = if (currentUser != null) {
-            getString(R.string.logged_in, currentUser.email)
-        } else {
-            getString(R.string.not_logged_in)
-        }
+        val userData = hashMapOf(
+            "name" to name.text.toString(),
+            "email" to currentUser?.email // Firebase already handles the password securely
+        )
+
+        db.collection("users")
+            .document(currentUser?.uid ?: "")
+            .set(userData)
+            .addOnSuccessListener {
+                Log.d(myTag, "User data successfully stored in Firestore")
+            }
+            .addOnFailureListener { e ->
+                Log.w(myTag, "Error storing user data in Firestore", e)
+                displayMessage(view, "Error saving user details. Please try again.")
+            }
     }
 
-    // Show a message (Snackbar)
-    private fun displayMessage(view: View, msgTxt: String) {
-        Snackbar.make(view, msgTxt, Snackbar.LENGTH_SHORT).show()
+    private fun displayMessage(view: View, message: String) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    // Hide keyboard
     private fun closeKeyBoard() {
         val view = this.currentFocus
         if (view != null) {
@@ -119,15 +125,9 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    // Lifecycle methods
-    override fun onStart() {
-        super.onStart()
-        Log.i(myTag, "in onStart")
-        updateUI()
+    private fun navigateToHomePage() {
+        val intent = Intent(this, HomePageActivity::class.java)
+        startActivity(intent)
+        finish()
     }
-
-
-
-
 }
-//ji

@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.ui.desktop)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -53,4 +55,6 @@ dependencies {
     implementation ("com.google.android.material:material:1.8.0")
     implementation ("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation ("androidx.fragment:fragment-ktx:1.5.7")
+    implementation ("com.android.volley:volley:1.2.1")
+
 }

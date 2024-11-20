@@ -16,24 +16,21 @@
         android:src="@drawable/ic_launcher_foreground"
         />
     <TextView
+        android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="mark"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:id="@+id/txt1"/>
+        android:text="User Name"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
     <TextView
+        android:id="@+id/txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="10dp"
-        android:text="mark@gmail.com"
-        android:textSize="15sp"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/white"
-        android:id="@+id/txt2"/>
+        android:text="user@example.com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
 
 
 </LinearLayout>

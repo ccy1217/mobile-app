@@ -1,24 +1,44 @@
 package com.example.coursework
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var sharedPreferences: SharedPreferences
+    private val PREF_NAME = "MusicPreferences"
+    private val PREF_MUSIC_PLAYING = "isMusicPlaying"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_home)
-        //val intent = Intent(this, HomePageActivity::class.java)
-        //startActivity(intent)
 
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        mAuth = FirebaseAuth.getInstance()
+        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
+        // Check if the user is already logged in
+        if (mAuth.currentUser != null) {
+            // Check if music was previously playing
+            val isMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
 
+            // If music was playing, start it
+            if (isMusicPlaying) {
+                MusicPlayerManager.startMusic(this, R.raw.music1)
+            }
 
-    }}
-//ji
+            // Navigate to HomePageActivity
+            val intent = Intent(this, HomePageActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            // Navigate to LoginActivity if not logged in
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+}

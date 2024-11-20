@@ -1,34 +1,48 @@
 package com.example.coursework
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.Window
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
-
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var firestore: FirebaseFirestore
     private val myTag = "joanne"
+
+    // Define the SharedPreferences key for music state
+    private val PREF_MUSIC_PLAYING = "pref_music_playing"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
 
-        // Initialize Firebase Auth
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance()
-        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        firestore = FirebaseFirestore.getInstance()
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("com.example.coursework", Context.MODE_PRIVATE)
+
+        // Set up Toolbar and Drawer
+        drawerLayout = findViewById(R.id.drawer_layout)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -36,12 +50,50 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        // Handle music state on app launch
+        val wasMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
+        if (wasMusicPlaying) {
+            MusicPlayerManager.startMusic(this, R.raw.music1)
+        } else {
+            MusicPlayerManager.stopMusic()
+        }
+
+        // Load user information into the Navigation Drawer header
+        loadUserInfo(navigationView)
+
+        // Load default fragment when activity is created
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
         Log.i(myTag, "Main Home Page loaded")
+    }
+
+    private fun loadUserInfo(navigationView: NavigationView) {
+        val headerView = navigationView.getHeaderView(0) // Get the header layout
+        val userNameTextView = headerView.findViewById<TextView>(R.id.txt1) // TextView for name
+        val userEmailTextView = headerView.findViewById<TextView>(R.id.txt2) // TextView for email
+
+        val currentUser = mAuth.currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            firestore.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val name = document.getString("name") ?: "User Name"
+                        val email = document.getString("email") ?: "user@example.com"
+
+                        // Update TextViews in the header
+                        userNameTextView.text = name
+                        userEmailTextView.text = email
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(myTag, "Error loading user info: ${exception.message}")
+                }
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -59,51 +111,62 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         return true
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            onBackPressedDispatcher.onBackPressed()
-        }}
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        val aboutUsItem = menu?.findItem(R.id.about_us_click)
+        val logoutItem = menu?.findItem(R.id.logout_click)
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.option_menu, menu)
-            return true
+        val navyColor = ContextCompat.getColor(this, R.color.navy2) // Navy color
+
+        // Use safe calls to avoid nullability issues
+        aboutUsItem?.let {
+            val aboutUsTitle = SpannableString(it.title)
+            aboutUsTitle.setSpan(ForegroundColorSpan(navyColor), 0, aboutUsTitle.length, 0)
+            it.title = aboutUsTitle
         }
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.logout_click -> {
-                    // Call logout function
-                    logoutClick()
-                    return true
-                }
+        logoutItem?.let {
+            val logoutTitle = SpannableString(it.title)
+            logoutTitle.setSpan(ForegroundColorSpan(navyColor), 0, logoutTitle.length, 0)
+            it.title = logoutTitle
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout_click -> {
+                logoutClick()
+                return true
             }
-            return super.onOptionsItemSelected(item)
+            R.id.about_us_click -> {
+                AboutUsDialogFragment().show(supportFragmentManager, "AboutUsDialog")
+                return true
+            }
         }
+        return super.onOptionsItemSelected(item)
+    }
 
-        private fun logoutClick() {
-            Log.i(myTag, "Logout Clicked")
-            mAuth.signOut() // Firebase logout
-            updateUIOnLogout()
+    private fun logoutClick() {
+        Log.i(myTag, "Logout Clicked")
+        mAuth.signOut()
+        MusicPlayerManager.stopMusic()
+        sharedPreferences.edit().apply {
+            putBoolean(PREF_MUSIC_PLAYING, false)
+            apply()
         }
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
-        private fun updateUIOnLogout() {
-            // Redirect to login screen and finish this activity
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        override fun onStop() {
-            super.onStop()
-            Log.i(myTag, "in onStop")
-            // Perform any necessary cleanup here (but do NOT log out the user)
-        }
+    override fun onStop() {
+        super.onStop()
+        Log.i(myTag, "in onStop")
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        MusicPlayerManager.releaseMusic() // Release resources when activity is destroyed
+        MusicPlayerManager.releaseMusic()
     }
 }

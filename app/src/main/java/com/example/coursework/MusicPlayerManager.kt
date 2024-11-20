@@ -5,55 +5,38 @@ import android.media.MediaPlayer
 
 object MusicPlayerManager {
     private var mediaPlayer: MediaPlayer? = null
-    private var volume: Float = 0.4f // Default volume
+    private var volume: Float = 1.0f // Default volume (40% of max)
+    private const val MAX_VOLUME_MULTIPLIER = 500.0f // Boost the max volume
 
-    // Start music playback
     fun startMusic(context: Context, resId: Int) {
-        // If mediaPlayer is not null, stop and reset it first
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.stop()
-            }
-            it.reset()
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(context, resId)
+            mediaPlayer?.isLooping = true
         }
-
-        // Create a new MediaPlayer if it's null
-        mediaPlayer = MediaPlayer.create(context, resId)
-        mediaPlayer?.isLooping = true
-        mediaPlayer?.setVolume(volume, volume)
-        mediaPlayer?.start()
+        setVolume(volume)
+        if (!mediaPlayer!!.isPlaying) {
+            mediaPlayer?.start()
+        }
     }
 
-    // Stop the music
     fun stopMusic() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.stop()
-            }
-            it.reset()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.reset()
         mediaPlayer = null
     }
 
-    // Check if music is playing
     fun isPlaying(): Boolean {
         return mediaPlayer?.isPlaying == true
     }
 
-    // Set the music volume
-    fun setVolume(newVolume: Float) {
-        volume = newVolume
-        mediaPlayer?.setVolume(volume, volume)
-    }
-
-    // Get the current volume
-    fun getVolume(): Float {
-        return volume
-    }
-
-    // Release resources when done
     fun releaseMusic() {
         mediaPlayer?.release()
         mediaPlayer = null
+    }
+
+    fun setVolume(newVolume: Float) {
+        // Cap the volume between 0.0f and 1.0f, then apply the multiplier
+        volume = newVolume.coerceIn(0.0f, 1.0f) * MAX_VOLUME_MULTIPLIER
+        mediaPlayer?.setVolume(volume, volume) // Set volume for both channels
     }
 }
