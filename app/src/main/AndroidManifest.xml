@@ -21,9 +21,6 @@
             android:name=".ChooseActivity"
             android:exported="false" />
         <activity
-            android:name=".HistoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".HomePageActivity"
             android:exported="false" />
 
