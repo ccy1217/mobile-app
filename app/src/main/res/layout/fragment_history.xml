@@ -7,9 +7,7 @@
     android:background="@drawable/signup_background"
     tools:context=".HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
         android:layout_width="wrap_content"
@@ -38,5 +36,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search"
         app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
 </RelativeLayout>

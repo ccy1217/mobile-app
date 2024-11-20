@@ -35,12 +35,6 @@ class MainHomePageActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.setting -> {
-                // Navigate to Settings
-                val intent = Intent(this, SettingActivity::class.java)
-                startActivity(intent)
-                return true
-            }
             R.id.logout_click -> {
                 // Call logout function
                 logoutClick()

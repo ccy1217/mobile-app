@@ -74,12 +74,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
-                R.id.setting -> {
-                    // Navigate to Settings
-                    val intent = Intent(this, SettingActivity::class.java)
-                    startActivity(intent)
-                    return true
-                }
                 R.id.logout_click -> {
                     // Call logout function
                     logoutClick()
@@ -108,5 +102,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             // Perform any necessary cleanup here (but do NOT log out the user)
         }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        MusicPlayerManager.releaseMusic() // Release resources when activity is destroyed
+    }
 }
-//ji
