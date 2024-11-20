@@ -15,9 +15,6 @@
         android:theme="@style/Theme.Coursework"
         tools:targetApi="31">
         <activity
-            android:name=".SettingActivity"
-            android:exported="false" />
-        <activity
             android:name=".ChooseActivity"
             android:exported="false" />
         <activity

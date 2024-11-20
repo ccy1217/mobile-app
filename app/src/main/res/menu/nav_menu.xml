@@ -34,7 +34,7 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_setting"
-                    android:title="Check the history"
+                    android:title="Setting"
                     android:icon="@drawable/setting" />
             </group>
         </menu>

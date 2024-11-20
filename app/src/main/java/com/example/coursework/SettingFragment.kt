@@ -1,9 +1,12 @@
 package com.example.coursework
 
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,10 +25,15 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val switch = view.findViewById<Switch>(R.id.switch1)
+        val seekBar = view.findViewById<SeekBar>(R.id.seekbar1)
 
         // Set switch state based on music playing status
         switch.isChecked = MusicPlayerManager.isPlaying()
 
+        // Initialize SeekBar progress
+        seekBar.progress = (MusicPlayerManager.getVolume() * 100).toInt()
+
+        // Switch to control music playback
         switch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 MusicPlayerManager.startMusic(requireContext(), R.raw.music1)
@@ -35,5 +43,21 @@ class SettingFragment : Fragment() {
                 Toast.makeText(requireContext(), "Music stopped", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // SeekBar to control music volume
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val volume = progress / 100f
+                MusicPlayerManager.setVolume(volume)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Not needed
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Not needed
+            }
+        })
     }
 }
