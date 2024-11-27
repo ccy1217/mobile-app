@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 
 class QuizFragment : Fragment() {
 
@@ -49,48 +47,25 @@ class QuizFragment : Fragment() {
             val categoryParam = categoryMap[selectedCategory] ?: 9
             val difficultyParam = selectedDifficulty.lowercase()
 
-            val apiUrl = "https://opentdb.com/api.php?amount=$selectedNumber&category=$categoryParam&difficulty=$difficultyParam&type=$typeParam"
-
-            preCheckAvailability(apiUrl) { available ->
-                if (available) {
-                    val bundle = Bundle().apply {
-                        putString("type", typeParam)
-                        putInt("amount", selectedNumber)
-                        putInt("category", categoryParam)
-                        putString("difficulty", difficultyParam)
-                    }
-
-                    val questionFragment = QuestionFragment()
-                    questionFragment.arguments = bundle
-
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, questionFragment)
-                        .addToBackStack(null)
-                        .commit()
-                } else {
-                    Toast.makeText(context, "No questions available for the selected options. Please try different options.", Toast.LENGTH_LONG).show()
-                }
+            // Create a Bundle to pass data
+            val bundle = Bundle().apply {
+                putString("type", typeParam)
+                putInt("amount", selectedNumber)
+                putInt("category", categoryParam)
+                putString("difficulty", difficultyParam)
             }
+
+            // Create the QuestionFragment and pass the data
+            val questionFragment = QuestionFragment()
+            questionFragment.arguments = bundle
+
+            // Replace QuizFragment with QuestionFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, questionFragment)
+                .addToBackStack(null)  // Allows us to go back to the previous fragment
+                .commit()
         }
 
         return rootView
-    }
-
-    private fun preCheckAvailability(apiUrl: String, callback: (Boolean) -> Unit) {
-        val requestQueue = Volley.newRequestQueue(context)
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET,
-            apiUrl,
-            null,
-            { response ->
-                val results = response.optJSONArray("results")
-                callback(results != null && results.length() > 0)
-            },
-            { error ->
-                Toast.makeText(context, "Error checking availability: ${error.message}", Toast.LENGTH_SHORT).show()
-                callback(false)
-            }
-        )
-        requestQueue.add(jsonObjectRequest)
     }
 }

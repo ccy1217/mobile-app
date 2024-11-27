@@ -64,14 +64,8 @@ class QuestionFragment : Fragment() {
             apiUrl,
             null,
             { response ->
-                val results = response.optJSONArray("results")
-                if (results != null && results.length() > 0) {
-                    quizList = parseQuizData(response)
-                    setupRecyclerView(quizList)
-                } else {
-                    Log.e("QuizData", "No questions found. Falling back.")
-                    showFallbackOptions()
-                }
+                quizList = parseQuizData(response)
+                setupRecyclerView(quizList)
             },
             { error ->
                 Log.e("QuestionFragment", "Error fetching quiz data: ${error.message}")
@@ -79,11 +73,6 @@ class QuestionFragment : Fragment() {
         )
         requestQueue.add(jsonObjectRequest)
     }
-
-    private fun showFallbackOptions() {
-        Toast.makeText(context, "No questions available for the selected criteria. Try changing difficulty or type.", Toast.LENGTH_LONG).show()
-    }
-
 
     private fun parseQuizData(response: JSONObject): List<QuizDataClass> {
         val quizList = mutableListOf<QuizDataClass>()
@@ -170,4 +159,5 @@ class QuestionFragment : Fragment() {
         super.onDestroyView()
         requestQueue.cancelAll { true }
     }
+
 }
