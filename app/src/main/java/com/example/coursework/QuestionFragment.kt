@@ -28,11 +28,11 @@ class QuestionFragment : Fragment() {
     private lateinit var requestQueue: RequestQueue
     private lateinit var quizList: List<QuizDataClass>
     private var score = 0
-    private lateinit var submitButton: Button  // Reference to the submit button
+    private lateinit var submitButton: Button
 
     private lateinit var type: String
     private lateinit var difficulty: String
-    private var category: Int = 0  // Ensure category is an integer now
+    private var category: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,14 +43,14 @@ class QuestionFragment : Fragment() {
         recyclerView = rootView.findViewById(R.id.recyclerView2)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        submitButton = rootView.findViewById(R.id.submit_button)  // Initialize submit button
+        submitButton = rootView.findViewById(R.id.submit_button)
 
         requestQueue = Volley.newRequestQueue(context)
 
         // Retrieve data passed from QuizFragment
         type = arguments?.getString("type").orEmpty()
         val amount = arguments?.getInt("amount") ?: 10
-        category = arguments?.getInt("category") ?: 9  // Ensure category is retrieved as Int
+        category = arguments?.getInt("category") ?: 9
         difficulty = arguments?.getString("difficulty").orEmpty()
 
         val apiUrl = "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
@@ -148,16 +148,19 @@ class QuestionFragment : Fragment() {
                 val correctAnswers = score
                 val wrongAnswers = totalQuestions - correctAnswers
 
-               // val categoryName = arguments?.getString("categoryName") ?: "Unknown"
+                // Get category name from the arguments
+                val categoryName = arguments?.getString("categoryName") ?: "Unknown" // Use category name
 
+                // Make sure to store "True/False" as a string for quizType
+                val quizTypeString = if (type == "boolean") "True/False" else "Multiple Choice"
 
                 // Create a new quiz result document
                 val quizResultData = hashMapOf(
                     "marks" to marks,
                     "dateTime" to currentDateTime,
-                    "quizType" to type,
+                    "quizType" to quizTypeString,
                     "difficulty" to difficulty,
-                    "category" to category,
+                    "category" to categoryName,  // Store the category name
                     "totalQuestions" to totalQuestions,
                     "correctAnswers" to correctAnswers,
                     "wrongAnswers" to wrongAnswers,
@@ -170,7 +173,6 @@ class QuestionFragment : Fragment() {
                 // Update user marks and carrots in main document
                 transaction.update(userDocRef, mapOf("marks" to newMarks, "carrots" to newCarrots))
                 newMarks to newCarrots
-
             }.addOnSuccessListener { (updatedMarks, updatedCarrots) ->
                 // Pass updated values to ResultFragment
                 onCompletion(updatedMarks, updatedCarrots)
@@ -178,10 +180,5 @@ class QuestionFragment : Fragment() {
                 Log.e("FirestoreUpdate", "Failed to update Firestore: ${e.message}")
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        requestQueue.cancelAll { true }
     }
 }

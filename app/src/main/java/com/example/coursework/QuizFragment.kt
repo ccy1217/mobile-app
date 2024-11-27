@@ -60,18 +60,18 @@ class QuizFragment : Fragment() {
         nextButton.setOnClickListener {
             val selectedType = typeSpinner.selectedItem.toString()
             val selectedNumber = numberSpinner.selectedItem.toString().toInt()
-            val selectedCategory = categorySpinner.selectedItem.toString()
+            val selectedCategory = categorySpinner.selectedItem.toString() // Get category name
             val selectedDifficulty = difficultySpinner.selectedItem.toString()
 
             val typeParam = if (selectedType == "Multiple Choice") "multiple" else "boolean"
-            val categoryParam = categoryMap[selectedCategory] ?: 9
+            //val categoryParam = categoryMap[selectedCategory] ?: 9 // Get category ID (if needed)
             val difficultyParam = selectedDifficulty.lowercase()
 
             // Create a Bundle to pass data
             val bundle = Bundle().apply {
                 putString("type", typeParam)
                 putInt("amount", selectedNumber)
-                putInt("category", categoryParam)
+                putString("categoryName", selectedCategory) // Pass category name
                 putString("difficulty", difficultyParam)
             }
 
