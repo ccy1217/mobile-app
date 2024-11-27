@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class QuestionFragment : Fragment() {
 
@@ -27,6 +29,10 @@ class QuestionFragment : Fragment() {
     private lateinit var quizList: List<QuizDataClass>
     private var score = 0
     private lateinit var submitButton: Button  // Reference to the submit button
+
+    private lateinit var type: String
+    private lateinit var difficulty: String
+    private var category: Int = 0  // Ensure category is an integer now
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,16 +48,17 @@ class QuestionFragment : Fragment() {
         requestQueue = Volley.newRequestQueue(context)
 
         // Retrieve data passed from QuizFragment
-        val type = arguments?.getString("type")
-        val amount = arguments?.getInt("amount")
-        val category = arguments?.getInt("category")
-        val difficulty = arguments?.getString("difficulty")
+        type = arguments?.getString("type").orEmpty()
+        val amount = arguments?.getInt("amount") ?: 10
+        category = arguments?.getInt("category") ?: 9  // Ensure category is retrieved as Int
+        difficulty = arguments?.getString("difficulty").orEmpty()
 
         val apiUrl = "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
         fetchQuizData(apiUrl)
 
         // Set up button click listener to navigate to ResultFragment
         submitButton.setOnClickListener {
+            Log.d("QuestionFragment", "Submit button clicked")
             navigateToResultFragment()  // Navigate to ResultFragment when button is clicked
         }
 
@@ -102,7 +109,7 @@ class QuestionFragment : Fragment() {
     }
 
     private fun navigateToResultFragment() {
-        // Call your function to navigate to ResultFragment
+        // Update Firestore with quiz results
         updateFirestore(score) { updatedMarks, updatedCarrots ->
             val bundle = Bundle().apply {
                 putInt("marks", updatedMarks)
@@ -127,28 +134,46 @@ class QuestionFragment : Fragment() {
                 val currentMarks = snapshot.getLong("marks")?.toInt() ?: 0
                 val currentCarrots = snapshot.getLong("carrots")?.toInt() ?: 0
 
-                // Update marks and carrots
+                // Update total marks and carrots
                 val newMarks = currentMarks + marks
                 val newCarrots = currentCarrots + 1
 
+                // Format the current date and time as a string
+                val currentDateTime = SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault()).format(
+                    Date()
+                )
+
+                // Calculate the total questions, correct answers, and wrong answers
+                val totalQuestions = quizList.size
+                val correctAnswers = score
+                val wrongAnswers = totalQuestions - correctAnswers
+
+               // val categoryName = arguments?.getString("categoryName") ?: "Unknown"
+
+
+                // Create a new quiz result document
+                val quizResultData = hashMapOf(
+                    "marks" to marks,
+                    "dateTime" to currentDateTime,
+                    "quizType" to type,
+                    "difficulty" to difficulty,
+                    "category" to category,
+                    "totalQuestions" to totalQuestions,
+                    "correctAnswers" to correctAnswers,
+                    "wrongAnswers" to wrongAnswers,
+                )
+
+                // Store quiz result in sub-collection
+                val quizResultsRef = userDocRef.collection("quizResults")
+                quizResultsRef.add(quizResultData)
+
+                // Update user marks and carrots in main document
                 transaction.update(userDocRef, mapOf("marks" to newMarks, "carrots" to newCarrots))
-
                 newMarks to newCarrots
+
             }.addOnSuccessListener { (updatedMarks, updatedCarrots) ->
-                // Pass updated values to the ResultFragment
-                val bundle = Bundle().apply {
-                    putInt("marks", updatedMarks)
-                    putInt("carrots", updatedCarrots)
-                }
-
-                val resultFragment = ResultFragment().apply {
-                    arguments = bundle
-                }
-
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, resultFragment)
-                    .addToBackStack(null)
-                    .commit()
+                // Pass updated values to ResultFragment
+                onCompletion(updatedMarks, updatedCarrots)
             }.addOnFailureListener { e ->
                 Log.e("FirestoreUpdate", "Failed to update Firestore: ${e.message}")
             }
@@ -159,5 +184,4 @@ class QuestionFragment : Fragment() {
         super.onDestroyView()
         requestQueue.cancelAll { true }
     }
-
 }
