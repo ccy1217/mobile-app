@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Question shows here"
+            android:text="@string/question_show_here"
             android:textColor="@color/navy2"
             android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent"

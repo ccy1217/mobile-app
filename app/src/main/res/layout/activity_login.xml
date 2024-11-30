@@ -12,64 +12,37 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="cursive"
-        android:text="@string/daily_quiz"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:paddingTop="10dp"
-        android:textSize="40sp" />
+        style="@style/TitleTextStyle"
+        android:text="@string/daily_quiz" />
 
     <EditText
         android:id="@+id/type_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/EditText"
         android:layout_marginTop="53dp"
-        android:background="@drawable/search_bkg"
         android:hint="@string/Email"
         android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:textColor="@color/navy2"
-        android:textColorHint="@color/grey2"
-        android:textSize="18sp"
         tools:ignore="Autofill" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:hint="@string/Password"
-        android:textColorHint="@color/grey2"
-        app:boxBackgroundMode="none"
-        app:passwordToggleEnabled="true">
+        style="@style/PasswordLayoutStyle"
+        android:hint="@string/Confirm_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/type_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/search_bkg"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:textColor="@color/navy2"
-            android:textSize="18sp" />
+            style="@style/PasswordEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+
+<Button
         android:id="@+id/login_button"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:backgroundTint="@color/grey"
-        android:text="@string/LOGIN"
-        android:textColor="@color/white" />
+        style="@style/Button"
+        android:text="@string/LOGIN" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 

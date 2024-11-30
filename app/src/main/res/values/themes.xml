@@ -6,8 +6,81 @@
         <item name="colorPrimaryVariant">@color/orange</item>
         <item name="android:statusBarColor">@color/orange</item>
     </style>
+
+
     <style name="MenuItemTextStyle">
         <item name="android:textColor">@color/navy2</item>
     </style>
+
+    <!-- Title -->
+    <style name="TitleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">cursive</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+
+    <!-- searching box-->
+    <style name="SearchViewTheme" parent="Theme.AppCompat.Light">
+        <item name="android:textColorHint">@color/orange</item>
+        <item name="android:background">@drawable/search_bkg</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="searchIcon">@drawable/search</item>
+        <item name="closeIcon">@drawable/cancel</item>
+    </style>
+
+    <!--General edit text-->
+    <style name="EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">25dp</item>
+        <item name="android:background">@drawable/search_bkg</item>
+        <item name="android:textColorHint">@color/grey2</item>
+        <item name="android:textColor">@color/navy2</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Password -->
+    <style name="PasswordLayoutStyle"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:hint">@null</item>
+        <item name="android:textColorHint">@color/grey2</item>
+        <item name="boxBackgroundMode">none</item>
+        <item name="passwordToggleEnabled">true</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+    </style>
+    <style name="PasswordEditText"
+        parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/search_bkg</item> <!-- Custom background -->
+        <item name="android:inputType">textPassword</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/navy2</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Button -->
+    <style name="Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/orange</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">70dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Theme.Coursework" parent="Base.Theme.Coursework" />
 </resources>

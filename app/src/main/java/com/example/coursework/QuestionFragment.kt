@@ -44,7 +44,6 @@ class QuestionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         submitButton = rootView.findViewById(R.id.submit_button)
-
         requestQueue = Volley.newRequestQueue(context)
 
         // Retrieve data passed from QuizFragment
@@ -59,7 +58,7 @@ class QuestionFragment : Fragment() {
         // Set up button click listener to navigate to ResultFragment
         submitButton.setOnClickListener {
             Log.d("QuestionFragment", "Submit button clicked")
-            navigateToResultFragment()  // Navigate to ResultFragment when button is clicked
+            navigateToResultFragment()
         }
 
         return rootView
@@ -109,11 +108,11 @@ class QuestionFragment : Fragment() {
     }
 
     private fun navigateToResultFragment() {
-        // Update Firestore with quiz results
         updateFirestore(score) { updatedMarks, updatedCarrots ->
             val bundle = Bundle().apply {
-                putInt("marks", updatedMarks)
-                putInt("carrots", updatedCarrots)
+                putInt("marks", updatedMarks) // Total accumulated marks
+                putInt("carrots", updatedCarrots) // Total accumulated carrots
+                putInt("correctAnswers", score) // Current round's correct answers
             }
             val resultFragment = ResultFragment().apply { arguments = bundle }
             parentFragmentManager.beginTransaction()
@@ -129,53 +128,57 @@ class QuestionFragment : Fragment() {
             val db = FirebaseFirestore.getInstance()
             val userDocRef = db.collection("users").document(userId)
 
+            val currentDateTime = SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault()).format(Date())
+            val quizAttemptId = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+
             db.runTransaction { transaction ->
                 val snapshot = transaction.get(userDocRef)
                 val currentMarks = snapshot.getLong("marks")?.toInt() ?: 0
                 val currentCarrots = snapshot.getLong("carrots")?.toInt() ?: 0
 
-                // Update total marks and carrots
                 val newMarks = currentMarks + marks
                 val newCarrots = currentCarrots + 1
+                transaction.update(userDocRef, mapOf("marks" to newMarks, "carrots" to newCarrots))
 
-                // Format the current date and time as a string
-                val currentDateTime = SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault()).format(
-                    Date()
-                )
-
-                // Calculate the total questions, correct answers, and wrong answers
+                newMarks to newCarrots
+            }.addOnSuccessListener { (updatedMarks, updatedCarrots) ->
                 val totalQuestions = quizList.size
                 val correctAnswers = score
                 val wrongAnswers = totalQuestions - correctAnswers
-
-                // Get category name from the arguments
-                val categoryName = arguments?.getString("categoryName") ?: "Unknown" // Use category name
-
-                // Make sure to store "True/False" as a string for quizType
+                val categoryName = arguments?.getString("categoryName") ?: "Unknown"
                 val quizTypeString = if (type == "boolean") "True/False" else "Multiple Choice"
 
-                // Create a new quiz result document
                 val quizResultData = hashMapOf(
                     "marks" to marks,
                     "dateTime" to currentDateTime,
                     "quizType" to quizTypeString,
                     "difficulty" to difficulty,
-                    "category" to categoryName,  // Store the category name
+                    "category" to categoryName,
                     "totalQuestions" to totalQuestions,
                     "correctAnswers" to correctAnswers,
                     "wrongAnswers" to wrongAnswers,
+                    "attemptId" to quizAttemptId
                 )
 
-                // Store quiz result in sub-collection
                 val quizResultsRef = userDocRef.collection("quizResults")
-                quizResultsRef.add(quizResultData)
 
-                // Update user marks and carrots in main document
-                transaction.update(userDocRef, mapOf("marks" to newMarks, "carrots" to newCarrots))
-                newMarks to newCarrots
-            }.addOnSuccessListener { (updatedMarks, updatedCarrots) ->
-                // Pass updated values to ResultFragment
-                onCompletion(updatedMarks, updatedCarrots)
+                quizResultsRef.whereEqualTo("attemptId", quizAttemptId).get()
+                    .addOnSuccessListener { querySnapshot ->
+                        if (querySnapshot.isEmpty) {
+                            quizResultsRef.add(quizResultData)
+                                .addOnSuccessListener {
+                                    onCompletion(updatedMarks, updatedCarrots)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("FirestoreUpdate", "Failed to add quiz result: ${e.message}")
+                                }
+                        } else {
+                            onCompletion(updatedMarks, updatedCarrots)
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("FirestoreQuery", "Error checking duplicate results: ${e.message}")
+                    }
             }.addOnFailureListener { e ->
                 Log.e("FirestoreUpdate", "Failed to update Firestore: ${e.message}")
             }

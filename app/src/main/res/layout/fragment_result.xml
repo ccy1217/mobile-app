@@ -23,9 +23,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/quizComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:padding="7dp"
             android:text="You gain 1 carrort and 0 marks."
             android:textColor="@color/navy2" />
 

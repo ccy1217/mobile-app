@@ -9,115 +9,63 @@
     android:orientation="vertical"
     android:background="@drawable/signup_background"
     android:gravity="center"
-    android:padding="50dp"
+    android:padding="30dp"
     tools:context=".SignUpActivity">
 
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:padding="12dp"
+        android:src="@drawable/signup_cartoon"
+        tools:ignore="ContentDescription" />
 
+    <TextView
+        style="@style/TitleTextStyle"
+        android:text="@string/Become_a_member" />
 
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:padding="12dp"
-            android:src="@drawable/signup_cartoon"
-            tools:ignore="ContentDescription" />
+    <EditText
+        android:id="@+id/create_name"
+        style="@style/EditText"
+        android:hint="@string/Type_your_full_name"
+        android:inputType="text"
+        tools:ignore="Autofill" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="cursive"
-            android:text="@string/Become_a_member"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+    <EditText
+        android:id="@+id/create_email"
+        style="@style/EditText"
+        android:hint="@string/Type_your_email"
+        android:inputType="textEmailAddress"
+        tools:ignore="Autofill" />
 
-        <EditText
-            android:id="@+id/create_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/search_bkg"
-            android:hint="@string/Type_your_full_name"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="@color/navy2"
-            android:textColorHint="@color/grey2"
-            android:textSize="18sp"
-            tools:ignore="Autofill" />
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/PasswordLayoutStyle"
+        android:hint="@string/Type_your_password">
 
-        <EditText
-            android:id="@+id/create_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/search_bkg"
-            android:hint="@string/Type_your_email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textColor="@color/navy2"
-            android:textColorHint="@color/grey2"
-            android:textSize="18sp"
-            tools:ignore="Autofill" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/SignUpTypePassword"
+            style="@style/PasswordEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="@string/Type_your_password"
-            android:textColorHint="@color/grey2"
-            app:boxBackgroundMode="none"
-            app:passwordToggleEnabled="true">
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/PasswordLayoutStyle"
+        android:hint="@string/Confirm_password">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/SignUpTypePassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_bkg"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:singleLine="true"
-                android:textColor="@color/navy2"
-                android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/SignUpConfirmPassword"
+            style="@style/PasswordEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/signup_button"
+        style="@style/Button"
+        android:text="@string/create_an_account"
+        app:icon="@drawable/signup_photo" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="@string/Confirm_password"
-            android:textColorHint="@color/grey2"
-            app:boxBackgroundMode="none"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/SignUpConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_bkg"
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:singleLine="true"
-                android:textColor="@color/navy2"
-                android:textSize="18sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/signup_button"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/grey"
-            android:text="@string/create_an_account"
-            android:textColor="@color/white"
-            app:icon="@drawable/signup_photo"
-             />
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"

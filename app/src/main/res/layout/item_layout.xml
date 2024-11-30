@@ -13,10 +13,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/search_bkg">
+        android:background="@drawable/search_bkg"
+        android:padding="16dp">
 
+        <!-- Icon Image -->
         <ImageView
-            android:id="@+id/animals"
+            android:id="@+id/item_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="20dp"
@@ -27,31 +29,78 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
+        <!-- Title (Category + DateTime) -->
         <TextView
-            android:id="@+id/animalsString"
-            android:layout_width="wrap_content"
+            android:id="@+id/item_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/Animals"
+            android:layout_marginStart="16dp"
+            android:text="Category - DateTime"
             android:textSize="16sp"
             android:textColor="@color/navy2"
-            app:layout_constraintStart_toEndOf="@id/animals"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/item_icon"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.5"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0" />
 
+        <!-- Correct Answers -->
         <TextView
-            android:id="@+id/animalScore"
+            android:id="@+id/correct_answer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="4dp"
-            android:text="@string/score"
+            android:text="Correct: 0"
             android:textSize="14sp"
             android:textColor="@color/navy2"
-            app:layout_constraintStart_toEndOf="@id/animals"
-            app:layout_constraintTop_toBottomOf="@id/animalsString"/>
+            app:layout_constraintStart_toStartOf="@id/item_title"
+            app:layout_constraintTop_toBottomOf="@id/item_title" />
+
+        <!-- Wrong Answers -->
+        <TextView
+            android:id="@+id/wrong_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wrong: 0"
+            android:textSize="14sp"
+            android:textColor="@color/navy2"
+            app:layout_constraintStart_toStartOf="@id/correct_answer"
+            app:layout_constraintTop_toBottomOf="@id/correct_answer" />
+
+        <!-- Total Questions -->
+        <TextView
+            android:id="@+id/total_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total: 0"
+            android:textSize="14sp"
+            android:textColor="@color/navy2"
+            app:layout_constraintStart_toStartOf="@id/wrong_answer"
+            app:layout_constraintTop_toBottomOf="@id/wrong_answer" />
+
+        <!-- Quiz Type -->
+        <TextView
+            android:id="@+id/quiz_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type: Unknown"
+            android:textSize="14sp"
+            android:textColor="@color/navy2"
+            app:layout_constraintStart_toStartOf="@id/total_questions"
+            app:layout_constraintTop_toBottomOf="@id/total_questions" />
+
+        <!-- Difficulty -->
+        <TextView
+            android:id="@+id/difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Difficulty: Unknown"
+            android:textSize="14sp"
+            android:textColor="@color/navy2"
+            app:layout_constraintStart_toStartOf="@id/quiz_type"
+            app:layout_constraintTop_toBottomOf="@id/quiz_type" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
+

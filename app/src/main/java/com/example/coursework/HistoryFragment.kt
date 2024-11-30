@@ -1,87 +1,115 @@
 package com.example.coursework
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
 
 class HistoryFragment : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var dataList: ArrayList<DataClass>
-    private lateinit var imageList: Array<Int>
-    private lateinit var titleList: Array<String>
+    private lateinit var historyAdapter: HistoryAdapterClass
+    private lateinit var historyList: ArrayList<HistoryDataClass>
+    private lateinit var searchList: ArrayList<HistoryDataClass>
     private lateinit var searchView: SearchView
-    private lateinit var searchList: ArrayList<DataClass>
-    private lateinit var adapter: AdapterClass
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_history, container, false)
 
-        // Initialize data for images and titles
-        imageList = arrayOf(R.drawable.animals, R.drawable.sports, R.drawable.geography)
-        titleList = arrayOf("animals", "sports", "geography")
-
-        // Set up RecyclerView and SearchView
         recyclerView = view.findViewById(R.id.recyclerView)
-        searchView = view.findViewById(R.id.search)
-        recyclerView.layoutManager = LinearLayoutManager(activity)  // Use 'activity' context for RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.setHasFixedSize(true)
 
-        // Initialize data lists
-        dataList = arrayListOf()
+        searchView = view.findViewById(R.id.search)
+        historyList = arrayListOf()
         searchList = arrayListOf()
-        getData()
+        historyAdapter = HistoryAdapterClass(searchList)
+        recyclerView.adapter = historyAdapter
 
-        // Set adapter for the RecyclerView
-        adapter = AdapterClass(searchList)
-        recyclerView.adapter = adapter
+        fetchHistoryData()
 
-        // Set up SearchView listener
-        searchView.clearFocus()
+        setupSearchView()
+
+        return view
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun fetchHistoryData() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val db = FirebaseFirestore.getInstance()
+            val userDocRef = db.collection("users").document(userId)
+            val quizResultsRef = userDocRef.collection("quizResults")
+
+            quizResultsRef.get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val category = document.getString("category") ?: "Unknown"
+                        val dateTime = document.getString("dateTime") ?: "N/A"
+                        val score = document.getLong("marks")?.toInt() ?: 0
+                        val totalQuestions = document.getLong("totalQuestions")?.toInt() ?: 0
+                        val correctAnswers = document.getLong("correctAnswers")?.toInt() ?: 0
+                        val wrongAnswers = document.getLong("wrongAnswers")?.toInt() ?: 0
+                        val quizType = document.getString("quizType") ?: "Unknown"
+                        val difficulty = document.getString("difficulty") ?: "Unknown"
+
+                        // Add data to the list
+                        val historyData = HistoryDataClass(
+                            "$category - $dateTime",
+                            category,
+                            score,
+                            totalQuestions,
+                            correctAnswers,
+                            wrongAnswers,
+                            quizType,
+                            difficulty
+                        )
+                        historyList.add(historyData)
+                    }
+                    searchList.addAll(historyList)
+                    historyAdapter.notifyDataSetChanged()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("HistoryFragment", "Error fetching history: ${e.message}")
+                }
+        }
+    }
+
+    private fun setupSearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
                 return true
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchList.clear()
                 val searchText = newText?.lowercase(Locale.getDefault()).orEmpty()
-
                 if (searchText.isNotEmpty()) {
-                    dataList.forEach {
-                        if (it.dataTitle.lowercase(Locale.getDefault()).contains(searchText)) {
+                    historyList.forEach {
+                        if (it.title.lowercase(Locale.getDefault()).contains(searchText)) {
                             searchList.add(it)
                         }
                     }
                 } else {
-                    searchList.addAll(dataList)
+                    searchList.addAll(historyList)
                 }
-                adapter.notifyDataSetChanged()
+                historyAdapter.notifyDataSetChanged()
                 return false
             }
         })
-        return view
-    }
-
-    private fun getData() {
-        val scores = arrayOf(10, 20, 30) // Example scores for each item
-        for (i in imageList.indices) {
-            val dataClass = DataClass(imageList[i], titleList[i], scores[i]) // Pass the score here
-            dataList.add(dataClass)
-        }
-        searchList.addAll(dataList)
     }
 }

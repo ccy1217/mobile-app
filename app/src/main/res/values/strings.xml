@@ -29,6 +29,12 @@
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
 
+
+
+    <!--questions_item_layout.xml-->
+    <string name="question_show_here">Question shows here</string>
+
+
     <!-- spinner array-->
     <array name="questions_type_array">
         <item>Multiple Choice</item>
