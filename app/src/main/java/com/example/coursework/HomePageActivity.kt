@@ -54,7 +54,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         // Handle music state on app launch
         val wasMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
         if (wasMusicPlaying) {
-            MusicPlayerManager.startMusic(this, R.raw.music1)
+            MusicPlayerManager.startMusic(this, R.raw.music)
         } else {
             MusicPlayerManager.stopMusic()
         }

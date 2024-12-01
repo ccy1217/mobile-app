@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="33dp"
-        android:background="@drawable/search_bkg"
+        android:background="@drawable/general_bkg"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

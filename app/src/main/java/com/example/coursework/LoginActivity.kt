@@ -1,6 +1,5 @@
 package com.example.coursework
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -64,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
                 showSnackbar("Login successful.")
 
                 // Start music playback (if needed)
-                MusicPlayerManager.startMusic(this, R.raw.music1)
+                MusicPlayerManager.startMusic(this, R.raw.music)
 
                 // Navigate to HomePageActivity
                 val intent = Intent(this, HomePageActivity::class.java)

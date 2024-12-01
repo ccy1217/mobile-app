@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
             // If music was playing, start it
             if (isMusicPlaying) {
-                MusicPlayerManager.startMusic(this, R.raw.music1)
+                MusicPlayerManager.startMusic(this, R.raw.music)
             }
 
             // Navigate to HomePageActivity

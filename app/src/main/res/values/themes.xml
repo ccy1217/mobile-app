@@ -27,7 +27,7 @@
     <!-- searching box-->
     <style name="SearchViewTheme" parent="Theme.AppCompat.Light">
         <item name="android:textColorHint">@color/orange</item>
-        <item name="android:background">@drawable/search_bkg</item>
+        <item name="android:background">@drawable/general_bkg</item>
         <item name="android:textColor">@color/black</item>
         <item name="searchIcon">@drawable/search</item>
         <item name="closeIcon">@drawable/cancel</item>
@@ -38,7 +38,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">25dp</item>
-        <item name="android:background">@drawable/search_bkg</item>
+        <item name="android:background">@drawable/general_bkg</item>
         <item name="android:textColorHint">@color/grey2</item>
         <item name="android:textColor">@color/navy2</item>
         <item name="android:textSize">18sp</item>
@@ -63,7 +63,7 @@
         parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/search_bkg</item> <!-- Custom background -->
+        <item name="android:background">@drawable/general_bkg</item> <!-- Custom background -->
         <item name="android:inputType">textPassword</item>
         <item name="android:padding">12dp</item>
         <item name="android:singleLine">true</item>

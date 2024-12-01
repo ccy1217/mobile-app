@@ -51,7 +51,7 @@ class SettingFragment : Fragment() {
         switch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 // Start the music if the switch is on
-                MusicPlayerManager.startMusic(requireContext(), R.raw.music1)
+                MusicPlayerManager.startMusic(requireContext(), R.raw.music)
                 showToast("Music started")
             } else {
                 // Stop the music if the switch is off

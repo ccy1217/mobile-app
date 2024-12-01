@@ -26,9 +26,10 @@
     <string name="cancel">Cancel</string>
 
     <!--fragment_home.xml -->
-    <string name="total_carrot">Total carrot:</string>
+    <string name="total_carrot">Total carrot:  </string>
     <string name="feed">Feed</string>
     <string name="start_quiz">Start quiz</string>
+    <string name="show_carrot">show carrot</string>
 
     <!-- fragment_question.xml-->
     <string name="submit">submit</string>

@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/search_bkg">
+        android:background="@drawable/general_bkg">
 
         <TextView
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/search_bkg"
+            android:background="@drawable/general_bkg"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
             >
@@ -85,10 +85,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/search_bkg"
+            android:background="@drawable/general_bkg"
             android:layout_marginEnd="7dp"
-            android:layout_marginStart="7dp"
-            >
+            android:layout_marginStart="7dp">
             <Spinner
                 android:id="@+id/spinner3"
                 android:layout_width="match_parent"
@@ -111,7 +110,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/search_bkg"
+            android:background="@drawable/general_bkg"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
             >
