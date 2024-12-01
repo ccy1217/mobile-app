@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class QuizFragment : Fragment() {
 
     private lateinit var typeSpinner: Spinner
-    private lateinit var numberSpinner: Spinner
+    private lateinit var numberEditText: EditText
     private lateinit var categorySpinner: Spinner
     private lateinit var difficultySpinner: Spinner
     private lateinit var nextButton: Button
@@ -49,9 +51,9 @@ class QuizFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_quiz, container, false)
 
-        // Initialize spinners
+        // Initialize spinners and other views
         typeSpinner = rootView.findViewById(R.id.spinner1)
-        numberSpinner = rootView.findViewById(R.id.spinner2)
+        numberEditText = rootView.findViewById(R.id.editText_number)
         categorySpinner = rootView.findViewById(R.id.spinner3)
         difficultySpinner = rootView.findViewById(R.id.spinner4)
         nextButton = rootView.findViewById(R.id.next_button)
@@ -59,19 +61,34 @@ class QuizFragment : Fragment() {
         // Set button click listener
         nextButton.setOnClickListener {
             val selectedType = typeSpinner.selectedItem.toString()
-            val selectedNumber = numberSpinner.selectedItem.toString().toInt()
-            val selectedCategory = categorySpinner.selectedItem.toString() // Get category name
+            val selectedCategory = categorySpinner.selectedItem.toString()
             val selectedDifficulty = difficultySpinner.selectedItem.toString()
 
+            // Validate the number input
+            val inputNumber = numberEditText.text.toString()
+            if (inputNumber.isEmpty()) {
+                Toast.makeText(context, "Please enter the number of questions", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val selectedNumber = inputNumber.toIntOrNull()
+            if (selectedNumber == null || selectedNumber < 1 || selectedNumber > 50) {
+                Toast.makeText(context, "Please enter a valid number between 1 and 50", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Set the type parameter based on selected type
             val typeParam = if (selectedType == "Multiple Choice") "multiple" else "boolean"
-            //val categoryParam = categoryMap[selectedCategory] ?: 9 // Get category ID (if needed)
+            // Get category ID from the map
+            val categoryParam = categoryMap[selectedCategory] ?: 9
+            // Get difficulty as lowercase
             val difficultyParam = selectedDifficulty.lowercase()
 
-            // Create a Bundle to pass data
+            // Create a Bundle to pass the selected data to the next fragment
             val bundle = Bundle().apply {
                 putString("type", typeParam)
                 putInt("amount", selectedNumber)
-                putString("categoryName", selectedCategory) // Pass category name
+                putInt("category", categoryParam)
                 putString("difficulty", difficultyParam)
             }
 
@@ -79,10 +96,10 @@ class QuizFragment : Fragment() {
             val questionFragment = QuestionFragment()
             questionFragment.arguments = bundle
 
-            // Replace QuizFragment with QuestionFragment
+            // Replace the current fragment with the QuestionFragment
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, questionFragment)
-                .addToBackStack(null)  // Allows us to go back to the previous fragment
+                .addToBackStack(null) // Allows back navigation
                 .commit()
         }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="176dp"
@@ -8,19 +9,20 @@
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     >
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/txt1"
         android:layout_marginStart="5dp"
         android:src="@drawable/ic_launcher_foreground"
-        />
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
-        android:textColor="@android:color/white"
+        android:text="@string/user_name"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"/>
 
@@ -28,8 +30,8 @@
         android:id="@+id/txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="user@example.com"
-        android:textColor="@android:color/white"
+        android:text="@string/sample_email"
+        android:textColor="@color/white"
         android:textSize="14sp"/>
 
 

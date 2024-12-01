@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:padding="7dp"
-            android:text="You gain 1 carrort and 0 marks."
+            android:text="@string/one_round_result"
             android:textColor="@color/navy2" />
 
         <LinearLayout
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Scores:"
+                android:text="@string/total_marks"
                 android:textColor="@color/navy2" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="marks"
+                android:text="@string/marks"
                 android:textColor="@color/navy2" />
         </LinearLayout>
 
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total carrorts:"
+                android:text="@string/total_carrots"
                 android:textColor="@color/navy2" />
 
             <TextView
@@ -71,20 +71,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="carrots"
+                android:text="@string/carrots"
                 android:textColor="@color/navy2" />
         </LinearLayout>
 
         <Button
             android:id="@+id/take_button"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/orange"
             android:gravity="center"
-            android:text="TAKE ANOTHER QUIZ"
+            android:text="@string/take_another_quiz"
             android:textColor="@color/white" />
 
         <Button
@@ -96,7 +95,7 @@
             android:layout_marginBottom="30dp"
             android:backgroundTint="@color/orange"
             android:gravity="center"
-            android:text="TAKE THIS QUIZ AGAIN"
+            android:text="@string/take_this_quiz_again"
             android:textColor="@color/white" />
 
     </LinearLayout>

@@ -58,6 +58,7 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxBackgroundColor">@android:color/transparent</item>
     </style>
+
     <style name="PasswordEditText"
         parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
         <item name="android:layout_width">match_parent</item>

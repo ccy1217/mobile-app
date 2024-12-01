@@ -6,19 +6,15 @@
     android:background="@drawable/signup_background"
     tools:context=".SettingFragment">
 
-    <!-- Centered Title -->
+
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="cursive"
+        style="@style/TitleTextStyle"
+        android:text="@string/setting"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Setting"
-        android:textColor="@color/white"
-        android:textSize="40sp" />
+        android:layout_marginTop="50dp"
+    />
 
-    <!-- Content Area -->
     <LinearLayout
         android:id="@+id/settingsContainer"
         android:layout_width="match_parent"
@@ -31,27 +27,24 @@
         android:orientation="vertical"
         android:background="@drawable/search_bkg">
 
-        <!-- Music Switch -->
         <Switch
             android:id="@+id/switch1"
             android:layout_width="145dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="70dp"
-            android:text="Music: "
+            android:text="@string/music"
             android:textColor="@color/navy2"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        <!-- Volume Control Label -->
         <TextView
             android:layout_width="145dp"
             android:layout_height="20dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="70dp"
-            android:text="Volume control:"
+            android:text="@string/volume_control"
             android:textColor="@color/navy2" />
 
-        <!-- Volume SeekBar -->
         <SeekBar
             android:id="@+id/seekbar1"
             android:layout_width="match_parent"

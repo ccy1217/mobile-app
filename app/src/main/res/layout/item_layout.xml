@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Category - DateTime"
+            android:text="@string/category_date_time"
             android:textSize="16sp"
             android:textColor="@color/navy2"
             android:textStyle="bold"
@@ -46,57 +46,52 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0" />
 
-        <!-- Correct Answers -->
         <TextView
             android:id="@+id/correct_answer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Correct: 0"
+            android:text="@string/correct"
             android:textSize="14sp"
             android:textColor="@color/navy2"
             app:layout_constraintStart_toStartOf="@id/item_title"
             app:layout_constraintTop_toBottomOf="@id/item_title" />
 
-        <!-- Wrong Answers -->
         <TextView
             android:id="@+id/wrong_answer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wrong: 0"
+            android:text="@string/wrong"
             android:textSize="14sp"
             android:textColor="@color/navy2"
             app:layout_constraintStart_toStartOf="@id/correct_answer"
             app:layout_constraintTop_toBottomOf="@id/correct_answer" />
 
-        <!-- Total Questions -->
         <TextView
             android:id="@+id/total_questions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total: 0"
+            android:text="@string/total"
             android:textSize="14sp"
             android:textColor="@color/navy2"
             app:layout_constraintStart_toStartOf="@id/wrong_answer"
             app:layout_constraintTop_toBottomOf="@id/wrong_answer" />
 
-        <!-- Quiz Type -->
         <TextView
             android:id="@+id/quiz_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type: Unknown"
+            android:text="@string/type"
             android:textSize="14sp"
             android:textColor="@color/navy2"
             app:layout_constraintStart_toStartOf="@id/total_questions"
             app:layout_constraintTop_toBottomOf="@id/total_questions" />
 
-        <!-- Difficulty -->
         <TextView
             android:id="@+id/difficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Difficulty: Unknown"
+            android:text="@string/difficulty"
             android:textSize="14sp"
             android:textColor="@color/navy2"
             app:layout_constraintStart_toStartOf="@id/quiz_type"

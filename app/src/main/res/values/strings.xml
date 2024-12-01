@@ -1,40 +1,45 @@
 <resources>
     <string name="app_name">The Daily Quiz</string>
+
+    <!-- activity_login.xml -->
     <string name="daily_quiz">Daily Quiz</string>
     <string name="Email">Email</string>
-    <string name="Password">Password</string>
-    <string name="Do_not_have"> Don\'t have an account? </string>
+    <string name="password">Password</string>
     <string name="LOGIN">LOGIN</string>
-    <string name="Animals">Animals</string>
+    <string name="Do_not_have"> Don\'t have an account? </string>
     <string name="signup">   Sign Up</string>
-    <string name="create_an_account">create an account</string>
-    <string name="start_quiz">Start quiz</string>
-    <string name="check_my_record">Check my record</string>
-    <string name="welcome_to_daily_quiz">Welcome to Daily Quiz</string>
-    <string name="score">Score: 0</string>
-    <string name="home_page">Home page</string>
+
+    <!--activity_sign_up.xml -->
+    <string name="Become_a_member">Become a member</string>
+    <string name="Type_your_full_name">Type your full name</string>
     <string name="Type_your_email">Type your email</string>
     <string name="Type_your_password">Type your password</string>
-    <string name="Log_out">Log out</string>
-    <string name="Sign_In">   Sign In</string>
-    <string name="Type_your_full_name">Type your full name</string>
-    <string name="Already_have_an_account">Already have an account?</string>
-    <string name="Become_a_member">Become a member</string>
     <string name="Confirm_password">Confirm password</string>
-    <string name="Next">Next</string>
-    <string name="m20_2h8c6_9_2_6_2_9_6_4v12c0_1_1_0_9_2_2_2h12c1_1_0_2_0_9_2_2v4c22_2_9_21_1_2_20_2zm14_01_15c_0_59_0_1_05_0_47_1_05_1_05c0_0_59_0_47_1_04_1_05_1_04c0_59_1_04_0_45_1_04_1_04c15_04_14_53_14_6_15_14_01_15zm16_51_8_83c_0_63_0_93_1_23_1_21_1_56_1_81c_0_13_0_24_0_18_0_4_0_18_1_18h_1_52c0_0_41_0_06_1_08_0_26_1_65c0_41_0_73_1_18_1_16_1_63_1_8c0_48_0_68_0_21_1_94_1_14_1_94c_0_88_0_1_32_0_67_1_5_1_23l_1_37_0_57c11_51_5_96_12_52_5_13_99_5c1_23_0_2_08_0_56_2_51_1_26c16_87_6_87_17_08_7_99_16_51_8_83z">M20,2H8C6.9,2 6,2.9 6,4v12c0,1.1 0.9,2 2, 2h12c1.1,0 2,-0.9 2,-2V4C22,2.9 21.1,2 20,2zM14.01,15c-0.59, 0 -1.05,-0.47 -1.05,-1.05c0,-0.59 0.47,-1.04 1.05,-1.04c0.59, 1.04,0.45 1.04,1.04C15.04,14.53 14.6,15 14.01,15zM16.51,8.83c-0.63, 0.93 -1.23,1.21 -1.56,1.81c-0.13,0.24 -0.18,0.4 -0.18,1.18h-1.52c0, -0.41 -0.06,-1.08 0.26,-1.65c0.41,-0.73 1.18,-1.16 1.63,-1.8c0.48,-0.68 0.21,-1.94 -1.14,-1.94c-0.88,0 -1.32,0.67 -1.5,1.23l-1.37,-0.57C11.51,5.96 12.52,5 13.99,5c1.23,0 2.08,0.56 2.51,1.26C16.87,6.87 17.08,7.99 16.51,8.83z</string>
-    <string name="register_while_logged_in">you register successfully</string>
-    <string name="not_logged_in">you are fail to login.</string>
-    <string name="logged_in">You are logged in successfully as %s.</string>
-    <string name="open_nav">Open Navigation Drawer</string>
-    <string name="close_nav">Close Navigation Drawer</string>
+    <string name="create_an_account">create an account</string>
+    <string name="Already_have_an_account">Already have an account?</string>
+    <string name="Sign_In">   Sign In</string>
 
+    <!--fragment_about_us.xml-->
+    <string name="about_us_content">This is a quiz game.
+        User can customized the quiz. After finishing the quiz, user can gain 1 carrot.
+        Accumulating the carrots, can be used to  feed your rabbit. Enjoy playing and have fun!</string>
+    <string name="cancel">Cancel</string>
 
+    <!--fragment_home.xml -->
+    <string name="total_carrot">Total carrot:</string>
+    <string name="feed">Feed</string>
+    <string name="start_quiz">Start quiz</string>
 
-    <!--questions_item_layout.xml-->
-    <string name="question_show_here">Question shows here</string>
+    <!-- fragment_question.xml-->
+    <string name="submit">submit</string>
 
-
+    <!-- fragment_quiz.xml-->
+    <string name="no_of_question">Choose the number of questions:</string>
+    <string name="enter_no_of_question">Enter a number (1–50)</string>
+    <string name="questions_type">Choose the questions type:</string>
+    <string name="questions_category">Choose the category:</string>
+    <string name="questions_difficulty">Choose the difficulty:</string>
+    <string name="next">Next</string>
     <!-- spinner array-->
     <array name="questions_type_array">
         <item>Multiple Choice</item>
@@ -66,22 +71,59 @@
         <item>Entertainment: Japanese Anime &amp; Manga</item>
         <item>Entertainment: Cartoon &amp; Animations</item>
     </array>
-    <string-array name="questions_number_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
     <array name="questions_difficulties_array">
         <item>easy</item>
         <item>medium</item>
         <item>hard</item>
     </array>
+
+    <!--fragment_result.xml-->
+    <string name="one_round_result">You gain 1 carrot and 0 marks.</string>
+    <string name="total_marks">Total marks: </string>
+    <string name="marks">marks</string>
+    <string name="total_carrots">Total carrots: </string>
+    <string name="carrots">carrots</string>
+    <string name="take_another_quiz">take another quiz</string>
+    <string name="take_this_quiz_again">take this quiz again</string>
+
+    <!--fragment_setting.xml-->
+    <string name="setting">Setting</string>
+    <string name="music">Music:  </string>
+    <string name="volume_control">Volume control:  </string>
+    <string name="category_date_time">Category - DateTime</string>
+    <string name="correct">Correct: 0</string>
+    <string name="wrong">Wrong: 0</string>
+    <string name="total">Total: 0</string>
+    <string name="type">ype: Unknown</string>
+    <string name="difficulty">Difficulty: Unknown</string>
+
+    <!--nav_header.xml-->
+    <string name="user_name">User Name</string>
+    <string name="sample_email">user@example.com</string>
+
+    <!--questions_item_layout.xml-->
+    <string name="question_show_here">Question shows here</string>
+
+    <!--nav_menu.xml-->
+    <string name="home">Home</string>
+    <string name="quiz">Quiz</string>
+    <string name="score">Score</string>
+    <string name="check_my_history">Check my history</string>
+    <string name="other">Other</string>
+
+    <!--HomePageActivity.kt-->
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
+
+    <!--option_menu.xml-->
+    <string name="about_us">About us</string>
+    <string name="log_out">Log out</string>
+
+    <string name="register_while_logged_in">you register successfully</string>
+    <string name="not_logged_in">you are fail to login.</string>
+    <string name="logged_in">You are logged in successfully as %s.</string>
+
+
+
 
 </resources>

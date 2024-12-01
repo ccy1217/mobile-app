@@ -16,7 +16,7 @@
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:padding="12dp"
-        android:src="@drawable/signup_cartoon"
+        android:src="@drawable/carrot"
         tools:ignore="ContentDescription" />
 
     <TextView
