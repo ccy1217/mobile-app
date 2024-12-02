@@ -146,12 +146,14 @@ class QuestionFragment : Fragment() {
                 val correctAnswers = score
                 val wrongAnswers = totalQuestions - correctAnswers
                 val categoryName = arguments?.getString("categoryName") ?: "Unknown"
-                val quizTypeString = if (type == "boolean") "True/False" else "Multiple Choice"
+                //val categoryId = arguments?.getInt("category") ?: 9
+                //val categoryName = arguments?.getString("category")?: "Unknown"
+                Log.d("FirestoreUpdate", "Saving quiz result with categoryName: $categoryName")
 
                 val quizResultData = hashMapOf(
                     "marks" to marks,
                     "dateTime" to currentDateTime,
-                    "quizType" to quizTypeString,
+                    "quizType" to if (type == "boolean") "True/False" else "Multiple Choice",
                     "difficulty" to difficulty,
                     "category" to categoryName,
                     "totalQuestions" to totalQuestions,
@@ -184,4 +186,6 @@ class QuestionFragment : Fragment() {
             }
         }
     }
+
+
 }

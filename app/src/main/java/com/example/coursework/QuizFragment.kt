@@ -81,6 +81,7 @@ class QuizFragment : Fragment() {
             val typeParam = if (selectedType == "Multiple Choice") "multiple" else "boolean"
             // Get category ID from the map
             val categoryParam = categoryMap[selectedCategory] ?: 9
+            val selectedCategoryName = selectedCategory
             // Get difficulty as lowercase
             val difficultyParam = selectedDifficulty.lowercase()
 
@@ -88,6 +89,7 @@ class QuizFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString("type", typeParam)
                 putInt("amount", selectedNumber)
+                putString("categoryName", selectedCategoryName)
                 putInt("category", categoryParam)
                 putString("difficulty", difficultyParam)
             }
