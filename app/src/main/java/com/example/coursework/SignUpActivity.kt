@@ -96,14 +96,12 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun storeUserData(view: View) {
         val currentUser = mAuth.currentUser
-        val currentTime = System.currentTimeMillis()
 
         val userData = hashMapOf(
             "name" to name.text.toString(),
             "email" to currentUser?.email, // Firebase already handles the password securely
             "marks" to 0 ,
             "carrots" to 0,
-            "last_feed_time" to currentTime
         )
 
         db.collection("users")

@@ -27,21 +27,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private lateinit var firestore: FirebaseFirestore
     private val myTag = "joanne"
 
-    // Define the SharedPreferences key for music state
     private val PREF_MUSIC_PLAYING = "pref_music_playing"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("com.example.coursework", Context.MODE_PRIVATE)
 
-        // Set up Toolbar and Drawer
         drawerLayout = findViewById(R.id.drawer_layout)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -51,18 +47,13 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Handle music state on app launch
         val wasMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
         if (wasMusicPlaying) {
             MusicPlayerManager.startMusic(this, R.raw.music)
-        } else {
-            MusicPlayerManager.stopMusic()
         }
 
-        // Load user information into the Navigation Drawer header
         loadUserInfo(navigationView)
 
-        // Load default fragment when activity is created
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
@@ -72,20 +63,17 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun loadUserInfo(navigationView: NavigationView) {
-        val headerView = navigationView.getHeaderView(0) // Get the header layout
-        val userNameTextView = headerView.findViewById<TextView>(R.id.txt1) // TextView for name
-        val userEmailTextView = headerView.findViewById<TextView>(R.id.txt2) // TextView for email
+        val headerView = navigationView.getHeaderView(0)
+        val userNameTextView = headerView.findViewById<TextView>(R.id.txt1)
+        val userEmailTextView = headerView.findViewById<TextView>(R.id.txt2)
 
         val currentUser = mAuth.currentUser
-        if (currentUser != null) {
-            val userId = currentUser.uid
+        currentUser?.uid?.let { userId ->
             firestore.collection("users").document(userId).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         val name = document.getString("name") ?: "User Name"
                         val email = document.getString("email") ?: "user@example.com"
-
-                        // Update TextViews in the header
                         userNameTextView.text = name
                         userEmailTextView.text = email
                     }
@@ -116,9 +104,8 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val aboutUsItem = menu?.findItem(R.id.about_us_click)
         val logoutItem = menu?.findItem(R.id.logout_click)
 
-        val navyColor = ContextCompat.getColor(this, R.color.navy2) // Navy color
+        val navyColor = ContextCompat.getColor(this, R.color.navy2)
 
-        // Use safe calls to avoid nullability issues
         aboutUsItem?.let {
             val aboutUsTitle = SpannableString(it.title)
             aboutUsTitle.setSpan(ForegroundColorSpan(navyColor), 0, aboutUsTitle.length, 0)
@@ -158,11 +145,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i(myTag, "in onStop")
     }
 
     override fun onDestroy() {

@@ -14,8 +14,6 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
-
 class HomeFragment : Fragment() {
 
     private lateinit var showCarrot: TextView
@@ -23,7 +21,7 @@ class HomeFragment : Fragment() {
     private lateinit var countdownTimer: TextView
     private lateinit var feedButton: Button
     private lateinit var startQuizButton: Button
-    private lateinit var rabbitImage: ImageView // Reference to the ImageView
+    private lateinit var rabbitImage: ImageView
     private val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
@@ -37,12 +35,13 @@ class HomeFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
+        // Initialize UI components
         showCarrot = rootView.findViewById(R.id.show_carrot)
         lastTimeFed = rootView.findViewById(R.id.last_time_fed)
         countdownTimer = rootView.findViewById(R.id.countdown_timer)
         feedButton = rootView.findViewById(R.id.feed_button)
         startQuizButton = rootView.findViewById(R.id.startQuiz_button)
-        rabbitImage = rootView.findViewById(R.id.rabbit_image) // Initialize the ImageView
+        rabbitImage = rootView.findViewById(R.id.rabbit_image)
 
         // Fetch user data
         fetchUserData(rootView)
@@ -51,10 +50,9 @@ class HomeFragment : Fragment() {
             onFeedButtonClicked(rootView)
         }
 
-        // "Start Quiz" button navigates to the QuizFragment
         startQuizButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, QuizFragment()) // Update with your container ID
+                .replace(R.id.fragment_container, QuizFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -71,13 +69,23 @@ class HomeFragment : Fragment() {
             userRef.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        // Retrieve the carrot count from Firestore
+                        // Retrieve carrot count
                         val carrotCount = document.getLong("carrots") ?: 0
-                        showCarrot.text = carrotCount.toString() // Update the UI with carrot count
+                        showCarrot.text = carrotCount.toString()
 
-                        // Retrieve the last feed time
-                        val lastFeedTime = document.getLong("last_feed_time") ?: 0
-                        startDynamicTimer(lastFeedTime, rootView)
+                        // Retrieve last feed time (if it exists)
+                        val lastFeedTime = document.getLong("last_feed_time")
+
+                        if (lastFeedTime != null && lastFeedTime > 0) {
+                            lastTimeFed.text = formatTimestamp(lastFeedTime)
+                            startDynamicTimer(lastFeedTime, rootView)
+                        } else {
+                            // First-time login (last_feed_time is null)
+                            lastTimeFed.text = "--" // Display "--" if the user has never fed
+                            countdownTimer.text = "00:00:00"
+                            rabbitImage.setImageResource(R.drawable.cry)
+                            isTimerRunning = false // Don't start the timer automatically
+                        }
                     } else {
                         Log.d("HomeFragment", "No such document")
                     }
@@ -94,28 +102,25 @@ class HomeFragment : Fragment() {
         val currentTime = System.currentTimeMillis()
         val timeElapsed = currentTime - lastFeedTime
 
-        // Check if feeding interval has passed
         if (timeElapsed >= FEED_INTERVAL) {
-            countdownTimer.text = "00:00:00" // Timer is ready
+            countdownTimer.text = "00:00:00"
             isTimerRunning = false
-            rabbitImage.setImageResource(R.drawable.cry) // Show cry image
+            rabbitImage.setImageResource(R.drawable.cry)
         } else {
             val remainingTime = FEED_INTERVAL - timeElapsed
 
-            // Start the countdown timer
-            timer?.cancel() // Cancel any existing timer
+            timer?.cancel()
             timer = object : CountDownTimer(remainingTime, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     isTimerRunning = true
                     countdownTimer.text = formatTime(millisUntilFinished)
-                    rabbitImage.setImageResource(R.drawable.happy) // Show happy image during countdown
+                    rabbitImage.setImageResource(R.drawable.happy)
                 }
 
-                @SuppressLint("SetTextI18n")
                 override fun onFinish() {
                     isTimerRunning = false
                     countdownTimer.text = "00:00:00"
-                    rabbitImage.setImageResource(R.drawable.cry) // Revert to cry image
+                    rabbitImage.setImageResource(R.drawable.cry)
                 }
             }.start()
         }
@@ -129,40 +134,43 @@ class HomeFragment : Fragment() {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
+    private fun formatTimestamp(timestamp: Long): String {
+        val date = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp)
+        return date
+    }
+
     private fun onFeedButtonClicked(view: View) {
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
             val userRef = db.collection("users").document(currentUser.uid)
 
-            // Fetch the current carrot count and the timer value
             userRef.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         val carrotCount = document.getLong("carrots") ?: 0
-                        val timerText = countdownTimer.text.toString()
 
-                        // Check if the user has enough carrots
+                        // Prevent feeding if the user has less than 3 carrots
                         if (carrotCount < 3) {
                             displayMessage(view, "Not enough carrots to feed!")
                             return@addOnSuccessListener
                         }
 
-                        // Check if the timer is not "00:00:00"
                         if (isTimerRunning) {
                             displayMessage(view, "The rabbit is full now, feed it later!")
                             return@addOnSuccessListener
                         }
 
-                        // If the user has enough carrots and the timer is "00:00:00", proceed to feed
                         val updatedCarrotCount = carrotCount - 3
+                        val currentTime = System.currentTimeMillis()
+
+                        // Update the last_feed_time in Firestore when the user feeds the rabbit
                         userRef.update(
                             mapOf(
                                 "carrots" to updatedCarrotCount,
-                                "last_feed_time" to System.currentTimeMillis()
+                                "last_feed_time" to currentTime
                             )
                         ).addOnSuccessListener {
-                            // Successfully updated the carrot count, update the UI again
-                            fetchUserData(view)  // Refresh the carrot count UI
+                            fetchUserData(view)  // Fetch updated data after feeding
                             displayMessage(view, "Fed the rabbit! -3 Carrots")
                         }.addOnFailureListener { e ->
                             displayMessage(view, "Error feeding rabbit: ${e.message}")
@@ -181,6 +189,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        timer?.cancel() // Clean up the timer to avoid memory leaks
+        timer?.cancel() // Cancel the timer to prevent memory leaks or unexpected behavior
     }
 }

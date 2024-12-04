@@ -1,5 +1,6 @@
 package com.example.coursework
 
+import android.text.Html
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -86,19 +87,23 @@ class QuestionFragment : Fragment() {
 
         for (i in 0 until results.length()) {
             val questionObject = results.getJSONObject(i)
-            val question = questionObject.getString("question")
-            val correctAnswer = questionObject.getString("correct_answer")
+
+            // Decode HTML entities for the question and answers
+            val question = Html.fromHtml(questionObject.getString("question"), Html.FROM_HTML_MODE_LEGACY).toString()
+            val correctAnswer = Html.fromHtml(questionObject.getString("correct_answer"), Html.FROM_HTML_MODE_LEGACY).toString()
             val incorrectAnswers = questionObject.getJSONArray("incorrect_answers")
 
             val incorrectAnswerList = mutableListOf<String>()
             for (j in 0 until incorrectAnswers.length()) {
-                incorrectAnswerList.add(incorrectAnswers.getString(j))
+                val decodedAnswer = Html.fromHtml(incorrectAnswers.getString(j), Html.FROM_HTML_MODE_LEGACY).toString()
+                incorrectAnswerList.add(decodedAnswer)
             }
 
             quizList.add(QuizDataClass(question, correctAnswer, incorrectAnswerList))
         }
         return quizList
     }
+
 
     private fun setupRecyclerView(quizList: List<QuizDataClass>) {
         quizAdapter = QuizAdapterClass(quizList) { correct ->

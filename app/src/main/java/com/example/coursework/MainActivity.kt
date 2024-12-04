@@ -11,14 +11,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
-    private val PREF_NAME = "MusicPreferences"
+    private val preferenceName = "MusicPreferences"
     private val PREF_MUSIC_PLAYING = "isMusicPlaying"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mAuth = FirebaseAuth.getInstance()
-        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
 
         // Check if the user is already logged in
         if (mAuth.currentUser != null) {
