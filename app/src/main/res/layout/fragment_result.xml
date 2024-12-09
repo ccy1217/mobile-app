@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signup_background"
+    android:background="@drawable/main_background"
     tools:context=".HomeFragment">
 
     <LinearLayout
@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="33dp"
-        android:background="@drawable/general_bkg"
+        android:background="@drawable/general_item_background"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -77,27 +77,11 @@
 
         <Button
             android:id="@+id/take_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Button"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/orange"
             android:gravity="center"
-            android:text="@string/take_another_quiz"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/retake_button"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
-            android:backgroundTint="@color/orange"
-            android:gravity="center"
-            android:text="@string/take_this_quiz_again"
-            android:textColor="@color/white" />
-
+            android:text="@string/take_another_quiz"/>
     </LinearLayout>
 
 </RelativeLayout>

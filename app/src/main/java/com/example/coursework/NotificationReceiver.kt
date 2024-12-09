@@ -38,7 +38,6 @@ class NotificationReceiver : BroadcastReceiver() {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-
         // Build the notification
         val notification = NotificationCompat.Builder(context, "YOUR_CHANNEL_ID")
             .setContentTitle("Scheduled Notification")
@@ -46,7 +45,6 @@ class NotificationReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.carrot) // Replace with your app's icon
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
-
         // Show the notification
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(0, notification) // Use unique ID if sending multiple notifications

@@ -28,7 +28,6 @@ class ResultFragment : Fragment() {
         carrotTextView = rootView.findViewById(R.id.count_carrot)
         quizCommentTextView = rootView.findViewById(R.id.quizComment)
         takeButton = rootView.findViewById(R.id.take_button)
-        retakeButton = rootView.findViewById(R.id.retake_button)
 
         val marks = arguments?.getInt("marks") ?: 0
         val carrots = arguments?.getInt("carrots") ?: 0
@@ -39,13 +38,6 @@ class ResultFragment : Fragment() {
         quizCommentTextView.text = "You scored $correctAnswers correct answers in this round and gained 1 carrot!"
 
         takeButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CustomiseQuizFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        retakeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, CustomiseQuizFragment())
                 .addToBackStack(null)

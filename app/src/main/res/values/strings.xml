@@ -39,13 +39,14 @@
     <!-- fragment_question.xml-->
     <string name="submit">submit</string>
 
-    <!-- fragment_quiz.xml-->
+    <!-- fragment_customise_quiz.xml-->
     <string name="no_of_question">Choose the number of questions:</string>
     <string name="enter_no_of_question">Enter a number (1–50)</string>
     <string name="questions_type">Choose the questions type:</string>
     <string name="questions_category">Choose the category:</string>
     <string name="questions_difficulty">Choose the difficulty:</string>
     <string name="next">Next</string>
+    <string name="customise_your_quiz">Customise your quiz</string>
     <!-- spinner array-->
     <array name="questions_type_array">
         <item>Any type</item>
@@ -105,7 +106,7 @@
     <string name="set_the_notification">Set the Notification:</string>
     <string name="button_notification">Set Notification</string>
 
-    <!-- item_layout.xml-->
+    <!-- history_item_layout.xml-->
     <string name="category_date_time">Category - DateTime</string>
     <string name="correct">Correct: 0</string>
     <string name="wrong">Wrong: 0</string>
