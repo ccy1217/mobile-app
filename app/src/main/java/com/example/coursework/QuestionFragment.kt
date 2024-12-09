@@ -54,13 +54,7 @@ class QuestionFragment : Fragment() {
         difficulty = arguments?.getString("difficulty").orEmpty()
 
         // Construct the API URL based on the selected options
-        val apiUrl = if (category == 0) {
-            // Exclude the category parameter for "Any Category"
-            "https://opentdb.com/api.php?amount=$amount&difficulty=$difficulty&type=$type"
-        } else {
-            // Include the category parameter for specific categories
-            "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
-        }
+        val apiUrl = buildApiUrl(amount, category, difficulty, type)
 
         fetchQuizData(apiUrl)
 
@@ -71,6 +65,16 @@ class QuestionFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    // Helper function to build the API URL dynamically
+    private fun buildApiUrl(amount: Int, category: Int, difficulty: String, type: String): String {
+        val baseUrl = "https://opentdb.com/api.php?amount=$amount"
+        val categoryParam = if (category != 0) "&category=$category" else ""
+        val difficultyParam = if (difficulty.isNotEmpty()) "&difficulty=$difficulty" else ""
+        val typeParam = if (type != "any") "&type=$type" else "" // Exclude type for "Any type"
+
+        return "$baseUrl$categoryParam$difficultyParam$typeParam"
     }
 
     private fun fetchQuizData(apiUrl: String) {

@@ -79,10 +79,16 @@ class CustomiseQuizFragment : Fragment() {
             }
 
             // Set the type parameter based on selected type
-            val typeParam = if (selectedType == "Multiple Choice") "multiple" else "boolean"
+            val typeParam = when (selectedType) {
+                "Multiple Choice" -> "multiple"
+                "True/False" -> "boolean"
+                else -> "any" // For "Any Type"
+            }
+
             // Get category ID from the map
-            val categoryParam = categoryMap[selectedCategory] ?: 9
+            val categoryParam = categoryMap[selectedCategory] ?: 9 // Default to General Knowledge if not found
             val selectedCategoryName = selectedCategory
+
             // Get difficulty as lowercase
             val difficultyParam = selectedDifficulty.lowercase()
 
