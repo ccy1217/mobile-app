@@ -5,8 +5,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signup_background"
+    android:background="@drawable/main_background"
     tools:context=".CustomiseQuizFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TitleTextStyle"
+        android:text="@string/customise_your_quiz" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +27,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="33dp"
-        android:background="@drawable/general_bkg"
+        android:background="@drawable/general_item_background"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -97,6 +109,6 @@
             android:text="@string/next"/>
 
     </LinearLayout>
-
+</LinearLayout>
 
 </RelativeLayout>

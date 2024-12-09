@@ -101,22 +101,6 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.option_menu, menu)
-        val aboutUsItem = menu?.findItem(R.id.about_us_click)
-        val logoutItem = menu?.findItem(R.id.logout_click)
-
-        val navyColor = ContextCompat.getColor(this, R.color.navy)
-
-        aboutUsItem?.let {
-            val aboutUsTitle = SpannableString(it.title)
-            aboutUsTitle.setSpan(ForegroundColorSpan(navyColor), 0, aboutUsTitle.length, 0)
-            it.title = aboutUsTitle
-        }
-
-        logoutItem?.let {
-            val logoutTitle = SpannableString(it.title)
-            logoutTitle.setSpan(ForegroundColorSpan(navyColor), 0, logoutTitle.length, 0)
-            it.title = logoutTitle
-        }
         return true
     }
 

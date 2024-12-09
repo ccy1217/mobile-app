@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signup_background"
+    android:background="@drawable/main_background"
     tools:context=".SettingFragment">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/titleTextView"
         style="@style/TitleTextStyle"
         android:text="@string/setting"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
     />
 
     <LinearLayout
@@ -24,7 +23,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
-        android:background="@drawable/general_bkg">
+        android:background="@drawable/general_item_background">
 
         <Switch
             android:id="@+id/switch1"

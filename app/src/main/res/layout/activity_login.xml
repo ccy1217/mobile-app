@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/signup_background"
+    android:background="@drawable/main_background"
     android:gravity="center"
     android:padding="50dp"
     tools:context=".LoginActivity">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         style="@style/TitleTextStyle"
         android:text="@string/daily_quiz" />
 
