@@ -47,20 +47,14 @@ class QuestionFragment : Fragment() {
         submitButton = rootView.findViewById(R.id.submit_button)
         requestQueue = Volley.newRequestQueue(context)
 
-        // Retrieve data passed from QuizFragment
+        // Retrieve data passed from CustomizeQuizFragment
         type = arguments?.getString("type").orEmpty()
         val amount = arguments?.getInt("amount") ?: 10
         category = arguments?.getInt("category") ?: 0 // Default to 0 for "Any Category"
         difficulty = arguments?.getString("difficulty").orEmpty()
 
         // Construct the API URL based on the selected options
-        val apiUrl = if (category == 0) {
-            // Exclude the category parameter for "Any Category"
-            "https://opentdb.com/api.php?amount=$amount&difficulty=$difficulty&type=$type"
-        } else {
-            // Include the category parameter for specific categories
-            "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
-        }
+        val apiUrl = buildApiUrl(amount, category, difficulty, type)
 
         fetchQuizData(apiUrl)
 
@@ -71,6 +65,16 @@ class QuestionFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    // Helper function to build the API URL dynamically
+    private fun buildApiUrl(amount: Int, category: Int, difficulty: String, type: String): String {
+        val baseUrl = "https://opentdb.com/api.php?amount=$amount"
+        val categoryParam = if (category != 0) "&category=$category" else ""
+        val difficultyParam = if (difficulty.isNotEmpty() && difficulty != "Any Difficulty") "&difficulty=$difficulty" else ""
+        val typeParam = if (type != "any" && type != "Any Type") "&type=$type" else "" // Exclude type for "Any Type"
+
+        return "$baseUrl$categoryParam$difficultyParam$typeParam"
     }
 
     private fun fetchQuizData(apiUrl: String) {
@@ -111,7 +115,6 @@ class QuestionFragment : Fragment() {
         }
         return quizList
     }
-
 
     private fun setupRecyclerView(quizList: List<CustomiseQuizDataClass>) {
         quizAdapter = CustomiseQuizAdapterClass(quizList) { correct ->
@@ -159,8 +162,7 @@ class QuestionFragment : Fragment() {
                 val correctAnswers = score
                 val wrongAnswers = totalQuestions - correctAnswers
                 val categoryName = arguments?.getString("categoryName") ?: "Unknown"
-                //val categoryId = arguments?.getInt("category") ?: 9
-                //val categoryName = arguments?.getString("category")?: "Unknown"
+
                 Log.d("FirestoreUpdate", "Saving quiz result with categoryName: $categoryName")
 
                 val quizResultData = hashMapOf(
@@ -199,6 +201,4 @@ class QuestionFragment : Fragment() {
             }
         }
     }
-
-
 }

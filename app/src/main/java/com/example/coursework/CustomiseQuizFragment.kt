@@ -79,12 +79,22 @@ class CustomiseQuizFragment : Fragment() {
             }
 
             // Set the type parameter based on selected type
-            val typeParam = if (selectedType == "Multiple Choice") "multiple" else "boolean"
+            val typeParam = when (selectedType) {
+                "Multiple Choice" -> "multiple"
+                "True/False" -> "boolean"
+                else -> "any" // For "Any Type"
+            }
+
             // Get category ID from the map
-            val categoryParam = categoryMap[selectedCategory] ?: 9
+            val categoryParam = categoryMap[selectedCategory] ?: 9 // Default to General Knowledge if not found
             val selectedCategoryName = selectedCategory
-            // Get difficulty as lowercase
-            val difficultyParam = selectedDifficulty.lowercase()
+
+            // Set difficulty based on selected difficulty, exclude if "Any Difficulty"
+            val difficultyParam = if (selectedDifficulty == "Any Difficulty") {
+                null // Exclude difficulty from the API call
+            } else {
+                selectedDifficulty.lowercase()
+            }
 
             // Create a Bundle to pass the selected data to the next fragment
             val bundle = Bundle().apply {
@@ -92,7 +102,7 @@ class CustomiseQuizFragment : Fragment() {
                 putInt("amount", selectedNumber)
                 putString("categoryName", selectedCategoryName)
                 putInt("category", categoryParam)
-                putString("difficulty", difficultyParam)
+                difficultyParam?.let { putString("difficulty", it) } // Only add if it's not null
             }
 
             // Create the QuestionFragment and pass the data
