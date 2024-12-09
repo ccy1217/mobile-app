@@ -9,12 +9,12 @@
     android:orientation="vertical"
     android:background="@drawable/signup_background"
     android:gravity="center"
-    android:padding="30dp"
+    android:padding="20dp"
     tools:context=".SignUpActivity">
 
     <ImageView
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:padding="12dp"
         android:src="@drawable/carrot"
         tools:ignore="ContentDescription" />
@@ -58,6 +58,7 @@
     <Button
         android:id="@+id/signup_button"
         style="@style/Button"
+        android:layout_marginTop="10dp"
         android:text="@string/create_an_account"
         app:icon="@drawable/signup_photo" />
 
@@ -65,7 +66,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -82,4 +82,4 @@
             android:textColor="@color/yellow"
             android:textSize="16sp" />
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>

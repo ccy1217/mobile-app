@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
 class HomeFragment : Fragment() {
 
     private lateinit var showCarrot: TextView
@@ -25,7 +26,7 @@ class HomeFragment : Fragment() {
     private val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
-    private val FEED_INTERVAL: Long = 1 * 60 * 1000 // 1 minute in milliseconds
+    private val feedInterval: Long = 10 * 1000 // 1 minute in milliseconds
     private var timer: CountDownTimer? = null
     private var isTimerRunning = false
 
@@ -56,7 +57,6 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
         return rootView
     }
 
@@ -102,12 +102,12 @@ class HomeFragment : Fragment() {
         val currentTime = System.currentTimeMillis()
         val timeElapsed = currentTime - lastFeedTime
 
-        if (timeElapsed >= FEED_INTERVAL) {
+        if (timeElapsed >= feedInterval) {
             countdownTimer.text = "00:00:00"
             isTimerRunning = false
             rabbitImage.setImageResource(R.drawable.cry)
         } else {
-            val remainingTime = FEED_INTERVAL - timeElapsed
+            val remainingTime = feedInterval - timeElapsed
 
             timer?.cancel()
             timer = object : CountDownTimer(remainingTime, 1000) {
@@ -134,6 +134,7 @@ class HomeFragment : Fragment() {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun formatTimestamp(timestamp: Long): String {
         val date = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timestamp)
         return date

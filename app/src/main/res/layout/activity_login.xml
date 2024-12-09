@@ -36,6 +36,7 @@
     <Button
         android:id="@+id/login_button"
         style="@style/Button"
+        android:layout_marginTop="10dp"
         android:text="@string/LOGIN" />
 
 

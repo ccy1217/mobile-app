@@ -1,8 +1,11 @@
 package com.example.coursework
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +22,11 @@ class MainActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         sharedPreferences = getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+
+        // Create Notification Channel for API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
 
         // Check if the user is already logged in
         if (mAuth.currentUser != null) {
@@ -40,5 +48,21 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    // Create Notification Channel
+    private fun createNotificationChannel() {
+        val channelId = "YOUR_CHANNEL_ID"
+        val channelName = "Default Channel"
+        val channelDescription = "This channel is used for app notifications"
+
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = channelDescription
+        }
+
+        // Register the channel with the system
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager?.createNotificationChannel(channel)
     }
 }

@@ -6,13 +6,12 @@
     android:background="@drawable/signup_background"
     tools:context=".SettingFragment">
 
-
     <TextView
         android:id="@+id/titleTextView"
         style="@style/TitleTextStyle"
         android:text="@string/setting"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
     />
 
     <LinearLayout
@@ -20,38 +19,72 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/titleTextView"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="vertical"
         android:background="@drawable/general_bkg">
 
         <Switch
             android:id="@+id/switch1"
-            android:layout_width="145dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="70dp"
+            style="@style/Switch"
             android:text="@string/music"
-            android:textColor="@color/navy2"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
-            android:layout_width="145dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="70dp"
             android:text="@string/volume_control"
-            android:textColor="@color/navy2" />
+            style="@style/TitleTextView" />
 
         <SeekBar
             android:id="@+id/seekbar1"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="10dp"
             android:progress="40" />
+
+        <TextView
+            style="@style/TitleTextView"
+            android:text="@string/current_date_and_time" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/current_date"
+            style="@style/DateTimeTextView"
+            android:text="@string/current_date"/>
+
+        <TextView
+            android:id="@+id/current_time"
+            style="@style/DateTimeTextView"
+            android:text="@string/current_time"/>
+
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/notificationSwitch"
+            style="@style/Switch"
+            android:text="@string/set_the_notification"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:timePickerMode="spinner" />
+
+        <Button
+            android:id="@+id/setNotificationButton"
+            style="@style/Button"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/button_notification" />
+
 
     </LinearLayout>
 
