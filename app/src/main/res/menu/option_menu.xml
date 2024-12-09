@@ -5,13 +5,13 @@
     <item
         android:id="@+id/about_us_click"
         android:title="@string/about_us"
-        android:tint="@color/navy2"
+        android:tint="@color/navy"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/logout_click"
         android:title="@string/log_out"
-        android:tint="@color/navy2"
+        android:tint="@color/navy"
         app:showAsAction="never" />
 
 </menu>

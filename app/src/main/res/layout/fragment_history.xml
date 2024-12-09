@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:queryHint="Search..."
-            app:theme="@style/SearchViewTheme"
+            style="@style/SearchViewTheme"
             tools:layout_editor_absoluteX="16dp" />
 
         <androidx.recyclerview.widget.RecyclerView

@@ -8,10 +8,10 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class QuizAdapterClass(
-    private val quizList: List<QuizDataClass>,
+class CustomiseQuizAdapterClass(
+    private val quizList: List<CustomiseQuizDataClass>,
     private val onAnswerSelected: (Boolean) -> Unit
-) : RecyclerView.Adapter<QuizAdapterClass.QuizViewHolder>() {
+) : RecyclerView.Adapter<CustomiseQuizAdapterClass.QuizViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.questions_item_layout, parent, false)
@@ -29,7 +29,7 @@ class QuizAdapterClass(
         private val questionTextView: TextView = itemView.findViewById(R.id.questions)
         private val choicesRadioGroup: RadioGroup = itemView.findViewById(R.id.questions_choices)
 
-        fun bind(quizData: QuizDataClass, onAnswerSelected: (Boolean) -> Unit) {
+        fun bind(quizData: CustomiseQuizDataClass, onAnswerSelected: (Boolean) -> Unit) {
             questionTextView.text = quizData.question
             choicesRadioGroup.removeAllViews()
 

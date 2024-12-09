@@ -40,14 +40,14 @@ class ResultFragment : Fragment() {
 
         takeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, QuizFragment())
+                .replace(R.id.fragment_container, CustomiseQuizFragment())
                 .addToBackStack(null)
                 .commit()
         }
 
         retakeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, QuizFragment())
+                .replace(R.id.fragment_container, CustomiseQuizFragment())
                 .addToBackStack(null)
                 .commit()
         }

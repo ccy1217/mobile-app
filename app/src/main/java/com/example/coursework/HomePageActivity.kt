@@ -27,7 +27,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private lateinit var firestore: FirebaseFirestore
     private val myTag = "joanne"
 
-    private val PREF_MUSIC_PLAYING = "pref_music_playing"
+    private val preferenceMusicPlaying = "pref_music_playing"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        val wasMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
+        val wasMusicPlaying = sharedPreferences.getBoolean(preferenceMusicPlaying, false)
         if (wasMusicPlaying) {
             MusicPlayerManager.startMusic(this, R.raw.music)
         }
@@ -89,7 +89,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             R.id.nav_home -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             R.id.nav_quiz -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, QuizFragment()).commit()
+                .replace(R.id.fragment_container, CustomiseQuizFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HistoryFragment()).commit()
             R.id.nav_setting -> supportFragmentManager.beginTransaction()
@@ -104,7 +104,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val aboutUsItem = menu?.findItem(R.id.about_us_click)
         val logoutItem = menu?.findItem(R.id.logout_click)
 
-        val navyColor = ContextCompat.getColor(this, R.color.navy2)
+        val navyColor = ContextCompat.getColor(this, R.color.navy)
 
         aboutUsItem?.let {
             val aboutUsTitle = SpannableString(it.title)
@@ -139,7 +139,7 @@ class HomePageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         mAuth.signOut()
         MusicPlayerManager.stopMusic()
         sharedPreferences.edit().apply {
-            putBoolean(PREF_MUSIC_PLAYING, false)
+            putBoolean(preferenceMusicPlaying, false)
             apply()
         }
         val intent = Intent(this, LoginActivity::class.java)

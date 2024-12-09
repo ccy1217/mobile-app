@@ -29,7 +29,7 @@
             android:layout_marginTop="20dp"
             android:padding="7dp"
             android:text="@string/one_round_result"
-            android:textColor="@color/navy2" />
+            android:textColor="@color/navy" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_marks"
-                android:textColor="@color/navy2" />
+                android:textColor="@color/navy" />
 
             <TextView
                 android:id="@+id/count_marks"
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/marks"
-                android:textColor="@color/navy2" />
+                android:textColor="@color/navy" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_carrots"
-                android:textColor="@color/navy2" />
+                android:textColor="@color/navy" />
 
             <TextView
                 android:id="@+id/count_carrot"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/carrots"
-                android:textColor="@color/navy2" />
+                android:textColor="@color/navy" />
         </LinearLayout>
 
         <Button

@@ -25,7 +25,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/question_show_here"
             android:textSize="16sp"
-            android:textColor="@color/navy2"
+            android:textColor="@color/navy"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

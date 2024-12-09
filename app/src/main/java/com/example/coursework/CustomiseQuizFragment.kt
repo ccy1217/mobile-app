@@ -10,7 +10,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-class QuizFragment : Fragment() {
+class CustomiseQuizFragment : Fragment() {
 
     private lateinit var typeSpinner: Spinner
     private lateinit var numberEditText: EditText
@@ -19,6 +19,7 @@ class QuizFragment : Fragment() {
     private lateinit var nextButton: Button
 
     private val categoryMap = mapOf(
+        "Any Category" to 0,
         "General Knowledge" to 9,
         "Entertainment: Books" to 10,
         "Entertainment: Film" to 11,
@@ -49,7 +50,7 @@ class QuizFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_quiz, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_customise_quiz, container, false)
 
         // Initialize spinners and other views
         typeSpinner = rootView.findViewById(R.id.spinner1)

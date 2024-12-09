@@ -22,7 +22,8 @@
     <!--fragment_about_us.xml-->
     <string name="about_us_content">This is a quiz game.
         User can customized the quiz. After finishing the quiz, user can gain 1 carrot.
-        Accumulating the carrots, can be used to  feed your rabbit. Enjoy playing and have fun!</string>
+        Accumulating at least 3 carrots, can be used to feed your rabbit. Enjoy playing
+        and have fun!</string>
     <string name="cancel">Cancel</string>
 
     <!--fragment_home.xml -->
@@ -47,10 +48,12 @@
     <string name="next">Next</string>
     <!-- spinner array-->
     <array name="questions_type_array">
+        <item>Any type</item>
         <item>Multiple Choice</item>
         <item>True/False</item>
     </array>
     <array name="questions_category_array">
+        <item>Any Category</item>
         <item>General Knowledge</item>
         <item>Entertainment: Books</item>
         <item>Entertainment: Film</item>
@@ -77,6 +80,7 @@
         <item>Entertainment: Cartoon &amp; Animations</item>
     </array>
     <array name="questions_difficulties_array">
+        <item>Any Difficulty</item>
         <item>easy</item>
         <item>medium</item>
         <item>hard</item>
@@ -95,6 +99,11 @@
     <string name="setting">Setting</string>
     <string name="music">Music:  </string>
     <string name="volume_control">Volume control:  </string>
+    <string name="current_date_and_time">Current date and time:</string>
+    <string name="current_date">01/12/2024</string>
+    <string name="current_time">00:00</string>
+    <string name="set_the_notification">Set the Notification:</string>
+    <string name="button_notification">Set Notification</string>
 
     <!-- item_layout.xml-->
     <string name="category_date_time">Category - DateTime</string>

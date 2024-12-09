@@ -56,5 +56,7 @@ dependencies {
     implementation ("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation ("androidx.fragment:fragment-ktx:1.5.7")
     implementation ("com.android.volley:volley:1.2.1")
+    implementation ("androidx.core:core:1.10.0")  // or the latest stable version
+    implementation ("androidx.core:core-ktx:1.10.0")
 
 }

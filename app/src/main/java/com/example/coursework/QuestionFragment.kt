@@ -25,9 +25,9 @@ import java.util.Locale
 class QuestionFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var quizAdapter: QuizAdapterClass
+    private lateinit var quizAdapter: CustomiseQuizAdapterClass
     private lateinit var requestQueue: RequestQueue
-    private lateinit var quizList: List<QuizDataClass>
+    private lateinit var quizList: List<CustomiseQuizDataClass>
     private var score = 0
     private lateinit var submitButton: Button
 
@@ -50,10 +50,18 @@ class QuestionFragment : Fragment() {
         // Retrieve data passed from QuizFragment
         type = arguments?.getString("type").orEmpty()
         val amount = arguments?.getInt("amount") ?: 10
-        category = arguments?.getInt("category") ?: 9
+        category = arguments?.getInt("category") ?: 0 // Default to 0 for "Any Category"
         difficulty = arguments?.getString("difficulty").orEmpty()
 
-        val apiUrl = "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
+        // Construct the API URL based on the selected options
+        val apiUrl = if (category == 0) {
+            // Exclude the category parameter for "Any Category"
+            "https://opentdb.com/api.php?amount=$amount&difficulty=$difficulty&type=$type"
+        } else {
+            // Include the category parameter for specific categories
+            "https://opentdb.com/api.php?amount=$amount&category=$category&difficulty=$difficulty&type=$type"
+        }
+
         fetchQuizData(apiUrl)
 
         // Set up button click listener to navigate to ResultFragment
@@ -81,8 +89,8 @@ class QuestionFragment : Fragment() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    private fun parseQuizData(response: JSONObject): List<QuizDataClass> {
-        val quizList = mutableListOf<QuizDataClass>()
+    private fun parseQuizData(response: JSONObject): List<CustomiseQuizDataClass> {
+        val quizList = mutableListOf<CustomiseQuizDataClass>()
         val results: JSONArray = response.getJSONArray("results")
 
         for (i in 0 until results.length()) {
@@ -99,14 +107,14 @@ class QuestionFragment : Fragment() {
                 incorrectAnswerList.add(decodedAnswer)
             }
 
-            quizList.add(QuizDataClass(question, correctAnswer, incorrectAnswerList))
+            quizList.add(CustomiseQuizDataClass(question, correctAnswer, incorrectAnswerList))
         }
         return quizList
     }
 
 
-    private fun setupRecyclerView(quizList: List<QuizDataClass>) {
-        quizAdapter = QuizAdapterClass(quizList) { correct ->
+    private fun setupRecyclerView(quizList: List<CustomiseQuizDataClass>) {
+        quizAdapter = CustomiseQuizAdapterClass(quizList) { correct ->
             if (correct) score++
         }
         recyclerView.adapter = quizAdapter

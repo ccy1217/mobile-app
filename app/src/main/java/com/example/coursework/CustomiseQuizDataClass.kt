@@ -1,6 +1,6 @@
 package com.example.coursework
 
-data class QuizDataClass(
+data class CustomiseQuizDataClass(
     val question: String,
     val correctAnswer: String,
     val incorrectAnswers: List<String>
