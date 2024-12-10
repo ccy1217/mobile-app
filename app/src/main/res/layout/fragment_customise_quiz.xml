@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dp"
         >
 
     <com.google.android.material.textview.MaterialTextView
@@ -107,7 +106,7 @@
         <Button
             android:id="@+id/next_button"
             style="@style/Button"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="30dp"
             android:gravity="center"
             android:text="@string/next"/>

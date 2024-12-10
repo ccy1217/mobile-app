@@ -40,8 +40,8 @@ class NotificationReceiver : BroadcastReceiver() {
         }
         // Build the notification
         val notification = NotificationCompat.Builder(context, "YOUR_CHANNEL_ID")
-            .setContentTitle("Scheduled Notification")
-            .setContentText("This is your scheduled notification!")
+            .setContentTitle("The daily quiz")
+            .setContentText("Is time to do your quiz!!")
             .setSmallIcon(R.drawable.carrot) // Replace with your app's icon
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()

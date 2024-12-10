@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         // Check if the user is already logged in
         if (mAuth.currentUser != null) {
             // If the user is already logged in, send them directly to HomePageActivity
-            val intent = Intent(this, HomePageActivity::class.java)
+            val intent = Intent(this, MainPageActivity::class.java)
             startActivity(intent)
             finish() // Close the LoginActivity
             return
@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 MusicPlayerManager.startMusic(this, R.raw.music)
 
                 // Navigate to HomePageActivity
-                val intent = Intent(this, HomePageActivity::class.java)
+                val intent = Intent(this, MainPageActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {

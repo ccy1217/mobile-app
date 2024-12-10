@@ -129,7 +129,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun navigateToHomePage() {
-        val intent = Intent(this, HomePageActivity::class.java)
+        val intent = Intent(this, MainPageActivity::class.java)
         startActivity(intent)
         finish()
     }
