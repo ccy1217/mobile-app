@@ -2,7 +2,6 @@ package com.example.coursework
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -23,9 +22,7 @@ import java.util.*
 class SettingFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private val preferenceMusicPlaying = "pref_music_playing"
     private val preferenceMusicVolume = "musicVolume"
-    private val preferenceNotification = "notification_enabled" // New preference key for notification state
 
     private lateinit var timePicker: TimePicker
     private lateinit var db: FirebaseFirestore
@@ -33,7 +30,7 @@ class SettingFragment : Fragment() {
     private lateinit var currentDateTextView: TextView
     private lateinit var currentTimeTextView: TextView
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private lateinit var notificationSwitch: Switch // New switch for enabling/disabling notifications
+    private lateinit var musicSwitch: Switch
 
     private val handler = Handler()
     private val updateTimeRunnable = object : Runnable {
@@ -59,21 +56,26 @@ class SettingFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("com.example.coursework", Context.MODE_PRIVATE)
 
         // Initialize views
-        val switch = view.findViewById<Switch>(R.id.switch1)
+        musicSwitch = view.findViewById(R.id.switch1)
         val seekBar = view.findViewById<SeekBar>(R.id.seekbar1)
         timePicker = view.findViewById(R.id.timePicker)
         currentDateTextView = view.findViewById(R.id.current_date)
         currentTimeTextView = view.findViewById(R.id.current_time)
-        notificationSwitch = view.findViewById(R.id.notificationSwitch)
 
-        val isMusicPlaying = sharedPreferences.getBoolean(preferenceMusicPlaying, false)
+        // Load the saved volume preference
         val savedVolume = sharedPreferences.getFloat(preferenceMusicVolume, 0.4f)
-
-        switch.isChecked = isMusicPlaying
         seekBar.progress = (savedVolume * 100).toInt()
 
+        // Retrieve the music preference from Firestore and set the initial state
+        loadMusicPreference { isMusicPlaying ->
+            musicSwitch.isChecked = isMusicPlaying
+            if (isMusicPlaying) {
+                MusicPlayerManager.startMusic(requireContext(), R.raw.music)
+            }
+        }
+
         // Set up the music switch
-        switch.setOnCheckedChangeListener { _, isChecked ->
+        musicSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 MusicPlayerManager.startMusic(requireContext(), R.raw.music)
                 showToast("Music started")
@@ -81,10 +83,8 @@ class SettingFragment : Fragment() {
                 MusicPlayerManager.stopMusic()
                 showToast("Music stopped")
             }
-            sharedPreferences.edit().apply {
-                putBoolean(preferenceMusicPlaying, isChecked)
-                apply()
-            }
+            // Save the music preference to Firestore
+            saveMusicPreference(isChecked)
         }
 
         // Set up the volume control
@@ -92,6 +92,7 @@ class SettingFragment : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val volume = progress / 100f
                 MusicPlayerManager.setVolume(volume)
+                // Save the volume level in SharedPreferences
                 sharedPreferences.edit().apply {
                     putFloat(preferenceMusicVolume, volume)
                     apply()
@@ -104,32 +105,40 @@ class SettingFragment : Fragment() {
 
         // Update current date and time every second
         handler.post(updateTimeRunnable)
+    }
 
-        // Set the notification time when button is clicked
-        view.findViewById<View>(R.id.setNotificationButton).setOnClickListener {
-            setNotificationTime()
+    private fun loadMusicPreference(callback: (Boolean) -> Unit) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val isMusicPlaying = document.getBoolean("music_playing") ?: false
+                        callback(isMusicPlaying)
+                    } else {
+                        callback(false)
+                    }
+                }
+                .addOnFailureListener {
+                    callback(false)
+                }
+        } else {
+            callback(false)
         }
+    }
 
-        // Load the current notification time from Firestore and set it
-        loadNotificationTime()
-
-        // Handle the notification switch toggle
-        val isNotificationEnabled = sharedPreferences.getBoolean(preferenceNotification, false)
-        notificationSwitch.isChecked = isNotificationEnabled
-
-        notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
-            // Store the notification state in SharedPreferences
-            sharedPreferences.edit().apply {
-                putBoolean(preferenceNotification, isChecked)
-                apply()
-            }
-
-            // If notifications are enabled, we can start checking and send notifications when the time matches
-            if (isChecked) {
-                startCheckingNotificationTime() // Start checking time for notifications
-            } else {
-                stopCheckingNotificationTime() // Stop checking time for notifications
-            }
+    private fun saveMusicPreference(isMusicPlaying: Boolean) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            val userRef = db.collection("users").document(userId)
+            userRef.update("music_playing", isMusicPlaying)
+                .addOnSuccessListener {
+                    // Successfully saved preference
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Error saving music preference: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
@@ -139,83 +148,6 @@ class SettingFragment : Fragment() {
 
         currentDateTextView.text = currentDate
         currentTimeTextView.text = currentTime
-
-        // Check if current time matches the stored notification time
-        if (sharedPreferences.getBoolean(preferenceNotification, false)) {
-            checkTimeAndNotify(currentTime)
-        }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private fun setNotificationTime() {
-        val hour = timePicker.hour
-        val minute = timePicker.minute
-        val formattedTime = String.format("%02d:%02d", hour, minute)
-
-        // Save the selected time to Firestore
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            val userRef = db.collection("users").document(userId)
-            userRef.update("notification_time", formattedTime)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Notification time set to $formattedTime", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Error setting time: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
-    private fun loadNotificationTime() {
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            db.collection("users").document(userId)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val notificationTime = document.getString("notification_time")
-                        if (!notificationTime.isNullOrEmpty()) {
-                            // Check if the saved time matches the current system time
-                            val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
-                            if (notificationTime == currentTime) {
-                                sendNotification()
-                            }
-                        }
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Error loading time: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
-    private fun checkTimeAndNotify(currentTime: String) {
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            db.collection("users").document(userId)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val notificationTime = document.getString("notification_time")
-                        if (notificationTime == currentTime) {
-                            sendNotification()
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun sendNotification() {
-        // Trigger notification logic
-        NotificationReceiver().onReceive(requireContext(), Intent())
-    }
-
-    private fun startCheckingNotificationTime() {
-        handler.post(updateTimeRunnable) // Continue checking the time
-    }
-
-    private fun stopCheckingNotificationTime() {
-        handler.removeCallbacks(updateTimeRunnable) // Stop checking the time
     }
 
     private fun showToast(message: String) {

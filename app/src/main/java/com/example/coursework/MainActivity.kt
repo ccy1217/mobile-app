@@ -4,24 +4,22 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
-    private val preferenceName = "MusicPreferences"
-    private val PREF_MUSIC_PLAYING = "isMusicPlaying"
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mAuth = FirebaseAuth.getInstance()
-        sharedPreferences = getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
+        firestore = FirebaseFirestore.getInstance()
 
         // Create Notification Channel for API 26+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -30,16 +28,23 @@ class MainActivity : AppCompatActivity() {
 
         // Check if the user is already logged in
         if (mAuth.currentUser != null) {
-            // Check if music was previously playing
-            val isMusicPlaying = sharedPreferences.getBoolean(PREF_MUSIC_PLAYING, false)
-
-            // If music was playing, start it
-            if (isMusicPlaying) {
-                MusicPlayerManager.startMusic(this, R.raw.music)
+            // Check Firestore for music preference
+            val userId = mAuth.currentUser?.uid
+            if (userId != null) {
+                firestore.collection("users").document(userId).get()
+                    .addOnSuccessListener { document ->
+                        val isMusicPlaying = document.getBoolean("music_playing") ?: false
+                        if (isMusicPlaying) {
+                            MusicPlayerManager.startMusic(this, R.raw.music)
+                        }
+                    }
+                    .addOnFailureListener {
+                        // Handle error (optional)
+                    }
             }
 
-            // Navigate to HomePageActivity
-            val intent = Intent(this, HomePageActivity::class.java)
+            // Navigate to MainPageActivity
+            val intent = Intent(this, MainPageActivity::class.java)
             startActivity(intent)
             finish()
         } else {
@@ -50,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Create Notification Channel
     private fun createNotificationChannel() {
         val channelId = "YOUR_CHANNEL_ID"
         val channelName = "Default Channel"
@@ -61,7 +65,6 @@ class MainActivity : AppCompatActivity() {
             description = channelDescription
         }
 
-        // Register the channel with the system
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager?.createNotificationChannel(channel)
     }

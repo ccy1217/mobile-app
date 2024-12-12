@@ -130,6 +130,11 @@ class MainPageActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onDestroy() {
         super.onDestroy()
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            firestore.collection("users").document(userId)
+                .update("music_playing", MusicPlayerManager.isPlaying())
+        }
         MusicPlayerManager.releaseMusic()
     }
 }
