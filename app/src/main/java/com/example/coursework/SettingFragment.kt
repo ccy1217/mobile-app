@@ -2,6 +2,7 @@ package com.example.coursework
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -23,6 +24,7 @@ class SettingFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private val preferenceMusicVolume = "musicVolume"
+    private val preferenceNotification = "notification_enabled"
 
     private lateinit var timePicker: TimePicker
     private lateinit var db: FirebaseFirestore
@@ -31,6 +33,8 @@ class SettingFragment : Fragment() {
     private lateinit var currentTimeTextView: TextView
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var musicSwitch: Switch
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    private lateinit var notificationSwitch: Switch
 
     private val handler = Handler()
     private val updateTimeRunnable = object : Runnable {
@@ -61,6 +65,7 @@ class SettingFragment : Fragment() {
         timePicker = view.findViewById(R.id.timePicker)
         currentDateTextView = view.findViewById(R.id.current_date)
         currentTimeTextView = view.findViewById(R.id.current_time)
+        notificationSwitch = view.findViewById(R.id.notificationSwitch)
 
         // Load the saved volume preference
         val savedVolume = sharedPreferences.getFloat(preferenceMusicVolume, 0.4f)
@@ -105,6 +110,32 @@ class SettingFragment : Fragment() {
 
         // Update current date and time every second
         handler.post(updateTimeRunnable)
+
+        // Handle notification switch toggle
+        val isNotificationEnabled = sharedPreferences.getBoolean(preferenceNotification, false)
+        notificationSwitch.isChecked = isNotificationEnabled
+
+        notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            // Store the notification state in SharedPreferences
+            sharedPreferences.edit().apply {
+                putBoolean(preferenceNotification, isChecked)
+                apply()
+            }
+
+            if (isChecked) {
+                startCheckingNotificationTime() // Start checking time for notifications
+            } else {
+                stopCheckingNotificationTime() // Stop checking time for notifications
+            }
+        }
+
+        // Set the notification time
+        view.findViewById<View>(R.id.setNotificationButton)?.setOnClickListener {
+            setNotificationTime()
+        }
+
+        // Load the current notification time from Firestore
+        loadNotificationTime()
     }
 
     private fun loadMusicPreference(callback: (Boolean) -> Unit) {
@@ -142,12 +173,84 @@ class SettingFragment : Fragment() {
         }
     }
 
+    private fun setNotificationTime() {
+        val hour = timePicker.hour
+        val minute = timePicker.minute
+        val formattedTime = String.format("%02d:%02d", hour, minute)
+
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            val userRef = db.collection("users").document(userId)
+            userRef.update("notification_time", formattedTime)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Notification time set to $formattedTime", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Error setting time: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun loadNotificationTime() {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val notificationTime = document.getString("notification_time")
+                        if (!notificationTime.isNullOrEmpty()) {
+                            val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
+                            if (notificationTime == currentTime) {
+                                sendNotification()
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Error loading time: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun startCheckingNotificationTime() {
+        handler.post(updateTimeRunnable)
+    }
+
+    private fun stopCheckingNotificationTime() {
+        handler.removeCallbacks(updateTimeRunnable)
+    }
+
+    private fun sendNotification() {
+        NotificationReceiver().onReceive(requireContext(), Intent())
+    }
+
     private fun updateCurrentTime() {
         val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Calendar.getInstance().time)
         val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
 
         currentDateTextView.text = currentDate
         currentTimeTextView.text = currentTime
+
+        if (sharedPreferences.getBoolean(preferenceNotification, false)) {
+            checkTimeAndNotify(currentTime)
+        }
+    }
+
+    private fun checkTimeAndNotify(currentTime: String) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val notificationTime = document.getString("notification_time")
+                        if (notificationTime == currentTime) {
+                            sendNotification()
+                        }
+                    }
+                }
+        }
     }
 
     private fun showToast(message: String) {

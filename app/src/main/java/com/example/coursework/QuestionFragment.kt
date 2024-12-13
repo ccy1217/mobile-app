@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -83,15 +84,24 @@ class QuestionFragment : Fragment() {
             apiUrl,
             null,
             { response ->
-                quizList = parseQuizData(response)
-                setupRecyclerView(quizList)
+                val results = response.optJSONArray("results")
+                if (results != null && results.length() > 0) {
+                    quizList = parseQuizData(response)
+                    setupRecyclerView(quizList)
+                } else {
+                    Toast.makeText(context, "Invalid options selected. Please try again with different settings.", Toast.LENGTH_LONG).show()
+                    // Navigate back to CustomiseQuizFragment
+                    parentFragmentManager.popBackStack()
+                }
             },
             { error ->
                 Log.e("QuestionFragment", "Error fetching quiz data: ${error.message}")
+                Toast.makeText(context, "Failed to fetch quiz data. Please check your internet connection.", Toast.LENGTH_LONG).show()
             }
         )
         requestQueue.add(jsonObjectRequest)
     }
+
 
     private fun parseQuizData(response: JSONObject): List<CustomiseQuizDataClass> {
         val quizList = mutableListOf<CustomiseQuizDataClass>()
